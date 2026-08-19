@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,19 +12,18 @@
             box-sizing: border-box;
         }
 
-        html,
+        html {
+            scroll-behavior: smooth;
+            background: #050608;
+        }
+
         body {
             margin: 0;
-            width: 100%;
-            min-height: 100%;
+            min-height: 100vh;
             background: #050608;
             color: white;
             font-family: Arial, Helvetica, sans-serif;
             overflow-x: hidden;
-        }
-
-        body {
-            min-height: 100vh;
         }
 
         canvas {
@@ -34,6 +33,7 @@
             height: 100%;
             display: block;
             z-index: 0;
+            pointer-events: none;
         }
 
         /* =========================================================
@@ -46,7 +46,7 @@
             left: 50%;
             transform: translateX(-50%);
 
-            z-index: 20;
+            z-index: 50;
 
             display: flex;
             align-items: center;
@@ -127,7 +127,7 @@
         }
 
         /* =========================================================
-           HERO
+           HERO / FIRST SCREEN
            ========================================================= */
 
         .hero {
@@ -141,138 +141,235 @@
             align-items: center;
             justify-content: center;
 
-            padding: 130px 25px 80px;
+            padding:
+                110px
+                20px
+                80px;
 
-            pointer-events: none;
-        }
-
-        .hero-content {
-            width: 100%;
             text-align: center;
         }
 
-        .subtitle {
-            margin-top: 150px;
+        .hero-subtitle {
+            margin-top: 120px;
 
             color: rgba(255, 255, 255, 0.34);
 
-            font-size: 12px;
+            font-size: 13px;
             letter-spacing: 4px;
             text-transform: lowercase;
+        }
 
-            user-select: none;
+        .scroll-cue {
+            position: absolute;
+
+            bottom: 28px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            color: rgba(255, 255, 255, 0.18);
+
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+
+            animation:
+                scrollFloat 2.4s ease-in-out infinite;
+        }
+
+        @keyframes scrollFloat {
+            0%,
+            100% {
+                transform:
+                    translateX(-50%)
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    translateX(-50%)
+                    translateY(5px);
+            }
         }
 
         /* =========================================================
-           FEATURES
+           FEATURE SECTION
            ========================================================= */
 
-        .features {
+        .feature-section {
+            position: relative;
+            z-index: 6;
+
+            min-height: 95vh;
+
+            padding-top: 95px;
+            padding-bottom: 180px;
+
+            overflow: hidden;
+        }
+
+        .feature-heading {
             width: min(1100px, 92vw);
 
-            margin: 30px auto 0;
+            margin: 0 auto;
 
-            text-align: center;
-
-            pointer-events: auto;
+            text-align: left;
         }
 
-        .features-heading {
-            margin-top: 10px;
-        }
-
-        .features-title {
+        .feature-title {
             margin: 0;
 
-            font-size: clamp(30px, 5vw, 58px);
+            font-size:
+                clamp(
+                    34px,
+                    5vw,
+                    64px
+                );
+
+            line-height: 0.95;
+
+            font-weight: 850;
+
+            letter-spacing: -3px;
+        }
+
+        .feature-coming {
+            margin-top: 8px;
+
+            font-size:
+                clamp(
+                    28px,
+                    4vw,
+                    50px
+                );
+
+            line-height: 1;
+
             font-weight: 800;
+
             letter-spacing: -2px;
 
-            color: #ffffff;
+            color:
+                rgba(255, 255, 255, 0.30);
         }
 
-        .features-coming {
-            margin-top: 4px;
+        .feature-description {
+            margin-top: 18px;
 
-            font-size: clamp(25px, 4vw, 46px);
-            font-weight: 800;
+            max-width: 520px;
 
-            letter-spacing: -1px;
+            color:
+                rgba(255, 255, 255, 0.34);
 
-            color: rgba(255, 255, 255, 0.32);
+            font-size: 13px;
+            line-height: 1.6;
         }
 
-        .feature-grid {
-            margin-top: 32px;
+        /* =========================================================
+           CAROUSEL WINDOW
+           ========================================================= */
 
-            display: grid;
-            grid-template-columns:
-                repeat(4, minmax(0, 1fr));
+        .carousel-window {
+            position: relative;
 
-            gap: 16px;
+            width: 100%;
+
+            margin-top: 42px;
+
+            overflow: hidden;
         }
+
+        /*
+            The visible area begins around 1/3 of the page
+            and extends a little beyond the 3/4 mark.
+        */
+
+        .carousel-viewport {
+            width: 43%;
+
+            margin-left: 33.33%;
+
+            overflow: hidden;
+
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 18px;
+
+            width: max-content;
+
+            transform: translateX(0);
+
+            will-change: transform;
+        }
+
+        /* =========================================================
+           FEATURE CARDS
+           ========================================================= */
 
         .feature-card {
             position: relative;
 
-            min-height: 220px;
+            flex: 0 0 235px;
+
+            height: 285px;
 
             overflow: hidden;
 
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid
+                rgba(255, 255, 255, 0.08);
+
             border-radius: 22px;
 
-            background: rgba(13, 15, 20, 0.70);
-
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background:
+                rgba(11, 14, 19, 0.78);
 
             box-shadow:
-                0 20px 60px rgba(0, 0, 0, 0.28),
-                inset 0 1px rgba(255, 255, 255, 0.03);
+                0 18px 50px
+                rgba(0, 0, 0, 0.28),
+                inset 0 1px
+                rgba(255, 255, 255, 0.03);
 
             transition:
                 transform 0.25s ease,
-                border-color 0.25s ease,
-                box-shadow 0.25s ease;
+                border-color 0.25s ease;
         }
 
         .feature-card:hover {
-            transform: translateY(-6px);
+            transform: translateY(-7px);
 
             border-color:
-                rgba(255, 255, 255, 0.17);
-
-            box-shadow:
-                0 25px 70px rgba(0, 0, 0, 0.40),
-                0 0 30px rgba(255, 255, 255, 0.03);
+                rgba(255, 255, 255, 0.18);
         }
 
         .feature-image {
             width: 100%;
-            height: 135px;
-
-            object-fit: cover;
+            height: 175px;
 
             display: block;
+
+            object-fit: cover;
 
             background:
                 linear-gradient(
                     135deg,
                     #11151b,
-                    #080a0e
+                    #07090d
                 );
         }
 
-        .feature-overlay {
+        .feature-gradient {
             position: absolute;
+
             inset: 0;
 
             background:
                 linear-gradient(
                     to bottom,
-                    transparent 30%,
-                    rgba(0, 0, 0, 0.78) 100%
+                    transparent 32%,
+                    rgba(4, 6, 9, 0.96) 100%
                 );
 
             pointer-events: none;
@@ -281,84 +378,127 @@
         .feature-content {
             position: absolute;
 
-            left: 16px;
-            right: 16px;
-            bottom: 15px;
-
-            text-align: left;
+            left: 17px;
+            right: 17px;
+            bottom: 17px;
         }
 
         .feature-name {
             margin: 0;
 
-            font-size: 16px;
-            font-weight: 700;
-
-            color: white;
+            font-size: 17px;
+            font-weight: 750;
         }
 
-        .feature-description {
-            margin: 5px 0 0;
+        .feature-description-card {
+            margin: 7px 0 0;
+
+            color:
+                rgba(255, 255, 255, 0.45);
 
             font-size: 12px;
-            line-height: 1.4;
-
-            color: rgba(255, 255, 255, 0.53);
+            line-height: 1.45;
         }
 
         /* =========================================================
-           BOTTOM HINT
+           SECTION EDGE FADES
            ========================================================= */
 
-        .hint {
+        .carousel-fade-left,
+        .carousel-fade-right {
             position: absolute;
 
-            bottom: 26px;
-            left: 50%;
+            top: 0;
+            bottom: 0;
 
-            transform: translateX(-50%);
+            width: 18%;
 
-            z-index: 10;
-
-            color: rgba(255, 255, 255, 0.20);
-
-            font-size: 11px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            z-index: 3;
 
             pointer-events: none;
-            user-select: none;
+        }
+
+        .carousel-fade-left {
+            left: 0;
+
+            background:
+                linear-gradient(
+                    to right,
+                    #050608 5%,
+                    rgba(5, 6, 8, 0)
+                );
+        }
+
+        .carousel-fade-right {
+            right: 0;
+
+            background:
+                linear-gradient(
+                    to left,
+                    #050608 5%,
+                    rgba(5, 6, 8, 0)
+                );
         }
 
         /* =========================================================
-           RESPONSIVE
+           FOOTER
            ========================================================= */
 
-        @media (max-width: 950px) {
+        .footer {
+            position: relative;
 
-            .feature-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
+            z-index: 5;
+
+            padding: 50px 20px 80px;
+
+            border-top:
+                1px solid
+                rgba(255, 255, 255, 0.05);
+
+            text-align: center;
+
+            color:
+                rgba(255, 255, 255, 0.20);
+
+            font-size: 11px;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+        }
+
+        /* =========================================================
+           MOBILE
+           ========================================================= */
+
+        @media (max-width: 850px) {
+
+            .carousel-viewport {
+                width: 68%;
+
+                margin-left: 16%;
             }
 
-            .hero {
-                padding-top: 120px;
-            }
-
-            .subtitle {
-                margin-top: 120px;
+            .feature-card {
+                flex-basis: 220px;
+                height: 270px;
             }
         }
 
-        @media (max-width: 650px) {
+        @media (max-width: 620px) {
 
             .nav {
-                width: calc(100% - 24px);
-                justify-content: center;
+                width:
+                    calc(100% - 22px);
+
+                justify-content:
+                    center;
             }
 
             .nav-item {
-                padding: 9px 10px;
+                padding:
+                    9px 10px;
+
                 font-size: 11px;
             }
 
@@ -368,24 +508,44 @@
             }
 
             .hero {
-                padding-top: 100px;
-                padding-bottom: 50px;
+                min-height: 100vh;
+
+                padding:
+                    100px 18px 60px;
             }
 
-            .subtitle {
-                margin-top: 90px;
+            .hero-subtitle {
+                margin-top: 95px;
+
+                font-size: 10px;
+
+                letter-spacing: 3px;
             }
 
-            .feature-grid {
-                grid-template-columns: 1fr;
+            .feature-section {
+                min-height: 100vh;
+
+                padding-top: 70px;
+            }
+
+            .feature-heading {
+                width:
+                    calc(100% - 36px);
+            }
+
+            .carousel-viewport {
+                width: 86%;
+
+                margin-left: 7%;
             }
 
             .feature-card {
-                min-height: 240px;
+                flex-basis: 205px;
+                height: 255px;
             }
 
-            .hint {
-                display: none;
+            .feature-image {
+                height: 150px;
             }
         }
     </style>
@@ -393,10 +553,15 @@
 
 <body>
 
+    <!-- =========================================================
+         PARTICLE BACKGROUND
+         ========================================================= -->
+
     <canvas id="canvas"></canvas>
 
+
     <!-- =========================================================
-         NAVIGATION
+         NAV
          ========================================================= -->
 
     <nav class="nav">
@@ -429,53 +594,73 @@
 
 
     <!-- =========================================================
-         MAIN CONTENT
+         HERO
          ========================================================= -->
 
-    <main class="hero">
+    <section class="hero">
 
-        <div class="hero-content">
+        <div class="hero-subtitle">
+            have fun ;)
+        </div>
 
-            <!-- Small text -->
-            <div class="subtitle">
-                have fun ;)
+        <div class="scroll-cue">
+            scroll to explore
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         FEATURE SECTION
+         ========================================================= -->
+
+    <section class="feature-section">
+
+        <div class="feature-heading">
+
+            <h2 class="feature-title">
+                THINGS WE FEATURE
+            </h2>
+
+            <div class="feature-coming">
+                / IS COMING
             </div>
 
-
-            <!-- Features heading -->
-
-            <section class="features">
-
-                <div class="features-heading">
-
-                    <h2 class="features-title">
-                        THINGS WE FEATURE
-                    </h2>
-
-                    <div class="features-coming">
-                        / IS COMING
-                    </div>
-
-                </div>
-
-
-                <!-- Cards are generated from JavaScript -->
-
-                <div
-                    class="feature-grid"
-                    id="featureGrid">
-                </div>
-
-            </section>
+            <p class="feature-description">
+                A collection of things we're building,
+                experimenting with, and putting together.
+            </p>
 
         </div>
 
-    </main>
+
+        <div class="carousel-window">
+
+            <div class="carousel-fade-left"></div>
+
+            <div class="carousel-viewport">
+
+                <div
+                    class="carousel-track"
+                    id="carouselTrack">
+                </div>
+
+            </div>
+
+            <div class="carousel-fade-right"></div>
+
+        </div>
+
+    </section>
 
 
-    <div class="hint">
-        move your mouse
-    </div>
+    <!-- =========================================================
+         FOOTER
+         ========================================================= -->
+
+    <footer class="footer">
+        MAJIN V1
+    </footer>
 
 
     <script>
@@ -487,113 +672,327 @@
            CHANGE YOUR CARDS HERE.
 
            image:
-             Paste an IMAGE URL between the quotes.
+             Paste an image URL.
 
            title:
-             Changes the card title.
+             Card title.
 
            description:
-             Changes the smaller text.
+             Small text under the title.
 
-           Example:
-
-           {
-               image: "https://example.com/image.png",
-               title: "Something",
-               description: "Your description."
-           }
+           You can add as many cards as you want.
 
            ========================================================= */
 
         const features = [
 
             {
-                image: "PASTE_IMAGE_URL_HERE",
-                title: "Feature One",
-                description: "Change this text."
+                image:
+                    "PASTE_IMAGE_URL_HERE",
+
+                title:
+                    "Feature One",
+
+                description:
+                    "Change this text."
             },
 
             {
-                image: "PASTE_IMAGE_URL_HERE",
-                title: "Feature Two",
-                description: "Change this text."
+                image:
+                    "PASTE_IMAGE_URL_HERE",
+
+                title:
+                    "Feature Two",
+
+                description:
+                    "Change this text."
             },
 
             {
-                image: "PASTE_IMAGE_URL_HERE",
-                title: "Feature Three",
-                description: "Change this text."
+                image:
+                    "PASTE_IMAGE_URL_HERE",
+
+                title:
+                    "Feature Three",
+
+                description:
+                    "Change this text."
             },
 
             {
-                image: "PASTE_IMAGE_URL_HERE",
-                title: "Feature Four",
-                description: "Change this text."
+                image:
+                    "PASTE_IMAGE_URL_HERE",
+
+                title:
+                    "Feature Four",
+
+                description:
+                    "Change this text."
+            },
+
+            {
+                image:
+                    "PASTE_IMAGE_URL_HERE",
+
+                title:
+                    "Feature Five",
+
+                description:
+                    "Change this text."
+            },
+
+            {
+                image:
+                    "PASTE_IMAGE_URL_HERE",
+
+                title:
+                    "Feature Six",
+
+                description:
+                    "Change this text."
             }
 
         ];
 
 
         /* =========================================================
-           GENERATE FEATURE CARDS
+           CAROUSEL SETTINGS
            ========================================================= */
 
-        const featureGrid =
-            document.getElementById(
-                "featureGrid"
-            );
+        const CARD_SPEED = 0.55;
 
-        features.forEach(
-            (feature) => {
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-                card.className =
-                    "feature-card";
-
-                card.innerHTML = `
-
-                    <img
-                        class="feature-image"
-                        src="${feature.image}"
-                        alt="${feature.title}"
-                        onerror="
-                            this.style.display='none';
-                        "
-                    >
-
-                    <div
-                        class="feature-overlay">
-                    </div>
-
-                    <div
-                        class="feature-content">
-
-                        <h3
-                            class="feature-name">
-                            ${feature.title}
-                        </h3>
-
-                        <p
-                            class="feature-description">
-                            ${feature.description}
-                        </p>
-
-                    </div>
-                `;
-
-                featureGrid.appendChild(
-                    card
-                );
-            }
-        );
+        const CARD_GAP = 18;
 
 
         /* =========================================================
-           PARTICLE CANVAS
+           CREATE CARDS
+           ========================================================= */
+
+        const track =
+            document.getElementById(
+                "carouselTrack"
+            );
+
+
+        function createCard(
+            feature
+        ) {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+            card.className =
+                "feature-card";
+
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+            image.className =
+                "feature-image";
+
+            image.src =
+                feature.image;
+
+            image.alt =
+                feature.title;
+
+
+            image.onerror =
+                function () {
+
+                    this.remove();
+
+                };
+
+
+            const gradient =
+                document.createElement(
+                    "div"
+                );
+
+            gradient.className =
+                "feature-gradient";
+
+
+            const content =
+                document.createElement(
+                    "div"
+                );
+
+            content.className =
+                "feature-content";
+
+
+            const title =
+                document.createElement(
+                    "h3"
+                );
+
+            title.className =
+                "feature-name";
+
+            title.textContent =
+                feature.title;
+
+
+            const description =
+                document.createElement(
+                    "p"
+                );
+
+            description.className =
+                "feature-description-card";
+
+            description.textContent =
+                feature.description;
+
+
+            content.appendChild(
+                title
+            );
+
+            content.appendChild(
+                description
+            );
+
+
+            card.appendChild(
+                image
+            );
+
+            card.appendChild(
+                gradient
+            );
+
+            card.appendChild(
+                content
+            );
+
+
+            return card;
+        }
+
+
+        /* =========================================================
+           DUPLICATE CARDS
+           =========================================================
+
+           The duplicated cards make the track seamless.
+        */
+
+        function populateCarousel() {
+
+            track.innerHTML = "";
+
+
+            const totalSets = 3;
+
+
+            for (
+                let set = 0;
+                set < totalSets;
+                set++
+            ) {
+
+                features.forEach(
+                    (
+                        feature
+                    ) => {
+
+                        track.appendChild(
+                            createCard(
+                                feature
+                            )
+                        );
+
+                    }
+                );
+            }
+        }
+
+
+        populateCarousel();
+
+
+        /* =========================================================
+           CAROUSEL ENGINE
+           ========================================================= */
+
+        let trackOffset = 0;
+
+
+        function getCardWidth() {
+
+            const firstCard =
+                track.querySelector(
+                    ".feature-card"
+                );
+
+
+            if (
+                !firstCard
+            ) {
+                return 253;
+            }
+
+
+            return (
+                firstCard.offsetWidth +
+                CARD_GAP
+            );
+        }
+
+
+        function animateCarousel() {
+
+            trackOffset -=
+                CARD_SPEED;
+
+
+            const loopWidth =
+                features.length *
+                getCardWidth();
+
+
+            /*
+                Once the first set has moved completely
+                out of view, move it back to the end.
+
+                This makes it feel like an infinite
+                stream of cards.
+            */
+
+            if (
+                Math.abs(
+                    trackOffset
+                ) >= loopWidth
+            ) {
+
+                trackOffset +=
+                    loopWidth;
+            }
+
+
+            track.style.transform =
+                `translateX(${trackOffset}px)`;
+
+
+            requestAnimationFrame(
+                animateCarousel
+            );
+        }
+
+
+        animateCarousel();
+
+
+        /* =========================================================
+           PARTICLE TITLE
            ========================================================= */
 
         const canvas =
@@ -606,13 +1005,18 @@
                 "2d"
             );
 
+
         let width = 0;
         let height = 0;
 
+
         const mouse = {
+
             x: -1000,
             y: -1000,
+
             active: false
+
         };
 
 
@@ -622,14 +1026,19 @@
 
         const PARTICLE_SPACING = 5;
 
-        // Smaller value = tighter mouse interaction.
-        const MOUSE_RADIUS = 78;
+        /*
+            Smaller = smaller mouse reaction area.
+        */
+
+        const MOUSE_RADIUS = 70;
+
 
         const MOUSE_FORCE = 18;
 
         const SPRING = 0.085;
 
         const DAMPING = 0.82;
+
 
         const STAR_COUNT = 260;
 
@@ -653,12 +1062,13 @@
 
 
         /* =========================================================
-           CREATE MAJIN V1 PARTICLES
+           TEXT PARTICLES
            ========================================================= */
 
         function createTextParticles() {
 
             particles = [];
+
 
             const tempWidth =
                 Math.min(
@@ -666,17 +1076,20 @@
                     1500
                 );
 
+
             const tempHeight =
                 Math.min(
                     height * 0.45,
                     500
                 );
 
+
             textCanvas.width =
                 tempWidth;
 
             textCanvas.height =
                 tempHeight;
+
 
             textCtx.clearRect(
                 0,
@@ -685,29 +1098,36 @@
                 tempHeight
             );
 
+
             let fontSize =
                 Math.min(
                     tempWidth * 0.18,
                     tempHeight * 0.60
                 );
 
+
             textCtx.font =
                 `900 ${fontSize}px Arial, Helvetica, sans-serif`;
+
 
             textCtx.textAlign =
                 "center";
 
+
             textCtx.textBaseline =
                 "middle";
 
+
             textCtx.fillStyle =
                 "#ffffff";
+
 
             textCtx.fillText(
                 "MAJIN V1",
                 tempWidth / 2,
                 tempHeight / 2
             );
+
 
             const image =
                 textCtx.getImageData(
@@ -717,14 +1137,19 @@
                     tempHeight
                 );
 
+
             const data =
                 image.data;
+
 
             const offsetX =
                 (width - tempWidth) / 2;
 
+
             const offsetY =
-                (height - tempHeight) / 2 - 20;
+                (height - tempHeight) / 2 -
+                20;
+
 
             for (
                 let y = 0;
@@ -739,36 +1164,56 @@
                 ) {
 
                     const index =
-                        (y * tempWidth + x) * 4;
+                        (
+                            y *
+                            tempWidth +
+                            x
+                        ) *
+                        4;
+
 
                     const alpha =
-                        data[index + 3];
+                        data[
+                            index +
+                            3
+                        ];
 
-                    if (alpha > 140) {
+
+                    if (
+                        alpha > 140
+                    ) {
 
                         particles.push({
 
                             x:
-                                offsetX + x,
+                                offsetX +
+                                x,
 
                             y:
-                                offsetY + y,
+                                offsetY +
+                                y,
 
                             homeX:
-                                offsetX + x,
+                                offsetX +
+                                x,
 
                             homeY:
-                                offsetY + y,
+                                offsetY +
+                                y,
 
                             vx: 0,
+
                             vy: 0,
 
                             size:
-                                Math.random() * 1.2 + 1.6,
+                                Math.random() *
+                                1.2 +
+                                1.6,
 
                             alpha:
-                                Math.random() * 0.25 + 0.75
-
+                                Math.random() *
+                                0.25 +
+                                0.75
                         });
                     }
                 }
@@ -777,12 +1222,13 @@
 
 
         /* =========================================================
-           CREATE STARS
+           STARS
            ========================================================= */
 
         function createStars() {
 
             stars = [];
+
 
             for (
                 let i = 0;
@@ -793,22 +1239,32 @@
                 stars.push({
 
                     x:
-                        Math.random() * width,
+                        Math.random() *
+                        width,
 
                     y:
-                        Math.random() * height,
+                        Math.random() *
+                        height,
 
                     length:
-                        Math.random() * 35 + 8,
+                        Math.random() *
+                        35 +
+                        8,
 
                     speed:
-                        Math.random() * STAR_SPEED + 0.25,
+                        Math.random() *
+                        STAR_SPEED +
+                        0.25,
 
                     alpha:
-                        Math.random() * 0.55 + 0.10,
+                        Math.random() *
+                        0.55 +
+                        0.10,
 
                     width:
-                        Math.random() * 1.2 + 0.2
+                        Math.random() *
+                        1.2 +
+                        0.2
 
                 });
             }
@@ -824,26 +1280,38 @@
             width =
                 window.innerWidth;
 
+
             height =
                 window.innerHeight;
 
+
             const pixelRatio =
                 Math.min(
-                    window.devicePixelRatio || 1,
+                    window.devicePixelRatio ||
+                    1,
                     2
                 );
 
+
             canvas.width =
-                width * pixelRatio;
+                width *
+                pixelRatio;
+
 
             canvas.height =
-                height * pixelRatio;
+                height *
+                pixelRatio;
+
 
             canvas.style.width =
-                width + "px";
+                width +
+                "px";
+
 
             canvas.style.height =
-                height + "px";
+                height +
+                "px";
+
 
             ctx.setTransform(
                 pixelRatio,
@@ -854,9 +1322,12 @@
                 0
             );
 
+
             createStars();
+
             createTextParticles();
         }
+
 
         window.addEventListener(
             "resize",
@@ -870,7 +1341,9 @@
 
         window.addEventListener(
             "mousemove",
-            (event) => {
+            (
+                event
+            ) => {
 
                 mouse.x =
                     event.clientX;
@@ -882,6 +1355,7 @@
                     true;
             }
         );
+
 
         window.addEventListener(
             "mouseleave",
@@ -900,7 +1374,7 @@
 
 
         /* =========================================================
-           UPDATE PARTICLES
+           PARTICLE UPDATE
            ========================================================= */
 
         function updateParticle(
@@ -914,6 +1388,7 @@
                 ) *
                 SPRING;
 
+
             const springY =
                 (
                     particle.homeY -
@@ -921,8 +1396,10 @@
                 ) *
                 SPRING;
 
+
             particle.vx +=
                 springX;
+
 
             particle.vy +=
                 springY;
@@ -936,9 +1413,11 @@
                     particle.x -
                     mouse.x;
 
+
                 const dy =
                     particle.y -
                     mouse.y;
+
 
                 const distance =
                     Math.sqrt(
@@ -946,32 +1425,39 @@
                         dy * dy
                     );
 
+
                 if (
                     distance > 0 &&
-                    distance < MOUSE_RADIUS
+                    distance <
+                        MOUSE_RADIUS
                 ) {
 
                     const nx =
                         dx /
                         distance;
 
+
                     const ny =
                         dy /
                         distance;
+
 
                     const influence =
                         1 -
                         distance /
                         MOUSE_RADIUS;
 
+
                     const force =
                         MOUSE_FORCE *
                         influence *
                         influence;
 
+
                     particle.vx +=
                         nx *
                         force;
+
 
                     particle.vy +=
                         ny *
@@ -983,12 +1469,14 @@
             particle.vx *=
                 DAMPING;
 
+
             particle.vy *=
                 DAMPING;
 
 
             particle.x +=
                 particle.vx;
+
 
             particle.y +=
                 particle.vy;
@@ -1008,6 +1496,7 @@
                 star.x +=
                     star.speed;
 
+
                 if (
                     star.x >
                     width + 100
@@ -1015,6 +1504,7 @@
 
                     star.x =
                         -100;
+
 
                     star.y =
                         Math.random() *
@@ -1033,6 +1523,7 @@
                             0.12
                     );
 
+
                 gradient.addColorStop(
                     0,
                     `rgba(
@@ -1043,23 +1534,29 @@
                     )`
                 );
 
+
                 gradient.addColorStop(
                     1,
                     "rgba(255,255,255,0)"
                 );
 
+
                 ctx.strokeStyle =
                     gradient;
+
 
                 ctx.lineWidth =
                     star.width;
 
+
                 ctx.beginPath();
+
 
                 ctx.moveTo(
                     star.x,
                     star.y
                 );
+
 
                 ctx.lineTo(
                     star.x -
@@ -1068,6 +1565,7 @@
                         star.length *
                         0.12
                 );
+
 
                 ctx.stroke();
             }
@@ -1086,6 +1584,7 @@
 
                 let glow = 0;
 
+
                 if (
                     mouse.active
                 ) {
@@ -1094,15 +1593,18 @@
                         particle.x -
                         mouse.x;
 
+
                     const dy =
                         particle.y -
                         mouse.y;
+
 
                     const distance =
                         Math.sqrt(
                             dx * dx +
                             dy * dy
                         );
+
 
                     if (
                         distance <
@@ -1119,7 +1621,8 @@
 
                 const brightness =
                     0.75 +
-                    glow * 0.25;
+                    glow *
+                    0.25;
 
 
                 ctx.fillStyle =
@@ -1127,12 +1630,15 @@
                         255,
                         255,
                         255,
-                        ${particle.alpha *
-                          brightness}
+                        ${
+                            particle.alpha *
+                            brightness
+                        }
                     )`;
 
 
                 ctx.beginPath();
+
 
                 ctx.arc(
                     particle.x,
@@ -1142,19 +1648,21 @@
                     Math.PI * 2
                 );
 
+
                 ctx.fill();
             }
         }
 
 
         /* =========================================================
-           ANIMATION
+           BACKGROUND ANIMATION
            ========================================================= */
 
         function animate() {
 
             ctx.fillStyle =
                 "#050608";
+
 
             ctx.fillRect(
                 0,
@@ -1174,21 +1682,26 @@
                     Math.min(
                         width,
                         height
-                    ) * 0.55
+                    ) *
+                    0.55
                 );
+
 
             glow.addColorStop(
                 0,
                 "rgba(255,255,255,0.025)"
             );
 
+
             glow.addColorStop(
                 1,
                 "rgba(0,0,0,0)"
             );
 
+
             ctx.fillStyle =
                 glow;
+
 
             ctx.fillRect(
                 0,
@@ -1221,7 +1734,7 @@
 
 
         /* =========================================================
-           NAV BUTTONS
+           NAV
            ========================================================= */
 
         const navItems =
@@ -1229,21 +1742,27 @@
                 ".nav-item"
             );
 
+
         navItems.forEach(
-            (item) => {
+            (
+                item
+            ) => {
 
                 item.addEventListener(
                     "click",
                     () => {
 
                         navItems.forEach(
-                            (nav) => {
+                            (
+                                nav
+                            ) => {
 
                                 nav.classList.remove(
                                     "active"
                                 );
                             }
                         );
+
 
                         item.classList.add(
                             "active"
@@ -1259,9 +1778,11 @@
            ========================================================= */
 
         resize();
+
         animate();
 
     </script>
 
 </body>
 </html>
+```
