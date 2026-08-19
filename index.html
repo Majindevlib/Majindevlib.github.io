@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,10 +16,15 @@
         body {
             margin: 0;
             width: 100%;
-            height: 100%;
-            overflow: hidden;
+            min-height: 100%;
             background: #050608;
+            color: white;
             font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+        }
+
+        body {
+            min-height: 100vh;
         }
 
         canvas {
@@ -27,10 +33,11 @@
             width: 100%;
             height: 100%;
             display: block;
+            z-index: 0;
         }
 
         /* =========================================================
-           TOP NAV
+           NAVIGATION
            ========================================================= */
 
         .nav {
@@ -39,7 +46,7 @@
             left: 50%;
             transform: translateX(-50%);
 
-            z-index: 10;
+            z-index: 20;
 
             display: flex;
             align-items: center;
@@ -120,43 +127,183 @@
         }
 
         /* =========================================================
-           CENTER CONTENT
+           HERO
            ========================================================= */
 
         .hero {
-            position: fixed;
-            inset: 0;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            pointer-events: none;
+            position: relative;
             z-index: 5;
-        }
 
-        .hero-content {
-            width: 100%;
-            height: 100%;
+            min-height: 100vh;
 
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+
+            padding: 130px 25px 80px;
+
+            pointer-events: none;
+        }
+
+        .hero-content {
+            width: 100%;
+            text-align: center;
         }
 
         .subtitle {
-            position: absolute;
+            margin-top: 150px;
 
-            top: calc(50% + 110px);
-
-            color: rgba(255, 255, 255, 0.32);
+            color: rgba(255, 255, 255, 0.34);
 
             font-size: 12px;
             letter-spacing: 4px;
-            text-transform: uppercase;
+            text-transform: lowercase;
 
             user-select: none;
+        }
+
+        /* =========================================================
+           FEATURES
+           ========================================================= */
+
+        .features {
+            width: min(1100px, 92vw);
+
+            margin: 30px auto 0;
+
+            text-align: center;
+
+            pointer-events: auto;
+        }
+
+        .features-heading {
+            margin-top: 10px;
+        }
+
+        .features-title {
+            margin: 0;
+
+            font-size: clamp(30px, 5vw, 58px);
+            font-weight: 800;
+            letter-spacing: -2px;
+
+            color: #ffffff;
+        }
+
+        .features-coming {
+            margin-top: 4px;
+
+            font-size: clamp(25px, 4vw, 46px);
+            font-weight: 800;
+
+            letter-spacing: -1px;
+
+            color: rgba(255, 255, 255, 0.32);
+        }
+
+        .feature-grid {
+            margin-top: 32px;
+
+            display: grid;
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 16px;
+        }
+
+        .feature-card {
+            position: relative;
+
+            min-height: 220px;
+
+            overflow: hidden;
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+
+            background: rgba(13, 15, 20, 0.70);
+
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.28),
+                inset 0 1px rgba(255, 255, 255, 0.03);
+
+            transition:
+                transform 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+
+            border-color:
+                rgba(255, 255, 255, 0.17);
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.40),
+                0 0 30px rgba(255, 255, 255, 0.03);
+        }
+
+        .feature-image {
+            width: 100%;
+            height: 135px;
+
+            object-fit: cover;
+
+            display: block;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #11151b,
+                    #080a0e
+                );
+        }
+
+        .feature-overlay {
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    transparent 30%,
+                    rgba(0, 0, 0, 0.78) 100%
+                );
+
+            pointer-events: none;
+        }
+
+        .feature-content {
+            position: absolute;
+
+            left: 16px;
+            right: 16px;
+            bottom: 15px;
+
+            text-align: left;
+        }
+
+        .feature-name {
+            margin: 0;
+
+            font-size: 16px;
+            font-weight: 700;
+
+            color: white;
+        }
+
+        .feature-description {
+            margin: 5px 0 0;
+
+            font-size: 12px;
+            line-height: 1.4;
+
+            color: rgba(255, 255, 255, 0.53);
         }
 
         /* =========================================================
@@ -164,15 +311,16 @@
            ========================================================= */
 
         .hint {
-            position: fixed;
-            bottom: 28px;
+            position: absolute;
+
+            bottom: 26px;
             left: 50%;
 
             transform: translateX(-50%);
 
             z-index: 10;
 
-            color: rgba(255, 255, 255, 0.22);
+            color: rgba(255, 255, 255, 0.20);
 
             font-size: 11px;
             letter-spacing: 2px;
@@ -182,24 +330,62 @@
             user-select: none;
         }
 
-        @media (max-width: 700px) {
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+
+        @media (max-width: 950px) {
+
+            .feature-grid {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+            .hero {
+                padding-top: 120px;
+            }
+
+            .subtitle {
+                margin-top: 120px;
+            }
+        }
+
+        @media (max-width: 650px) {
+
             .nav {
-                gap: 2px;
-                padding: 6px;
+                width: calc(100% - 24px);
+                justify-content: center;
             }
 
             .nav-item {
                 padding: 9px 10px;
-                font-size: 12px;
+                font-size: 11px;
             }
 
-            .version {
+            .version,
+            .profile {
                 display: none;
             }
 
+            .hero {
+                padding-top: 100px;
+                padding-bottom: 50px;
+            }
+
             .subtitle {
-                top: calc(50% + 80px);
-                font-size: 9px;
+                margin-top: 90px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card {
+                min-height: 240px;
+            }
+
+            .hint {
+                display: none;
             }
         }
     </style>
@@ -209,34 +395,216 @@
 
     <canvas id="canvas"></canvas>
 
+    <!-- =========================================================
+         NAVIGATION
+         ========================================================= -->
+
     <nav class="nav">
-        <button class="nav-item active">Home</button>
-        <button class="nav-item">Study</button>
-        <button class="nav-item">Media</button>
-        <button class="nav-item">More</button>
 
-        <div class="version">v1.0</div>
+        <button class="nav-item active">
+            Home
+        </button>
 
-        <div class="profile">◉</div>
+        <button class="nav-item">
+            Study
+        </button>
+
+        <button class="nav-item">
+            Media
+        </button>
+
+        <button class="nav-item">
+            More
+        </button>
+
+        <div class="version">
+            v1.0
+        </div>
+
+        <div class="profile">
+            ◉
+        </div>
+
     </nav>
 
-    <section class="hero">
+
+    <!-- =========================================================
+         MAIN CONTENT
+         ========================================================= -->
+
+    <main class="hero">
+
         <div class="hero-content">
 
+            <!-- Small text -->
             <div class="subtitle">
-                Have Fun ;)
+                have fun ;)
             </div>
 
+
+            <!-- Features heading -->
+
+            <section class="features">
+
+                <div class="features-heading">
+
+                    <h2 class="features-title">
+                        THINGS WE FEATURE
+                    </h2>
+
+                    <div class="features-coming">
+                        / IS COMING
+                    </div>
+
+                </div>
+
+
+                <!-- Cards are generated from JavaScript -->
+
+                <div
+                    class="feature-grid"
+                    id="featureGrid">
+                </div>
+
+            </section>
+
         </div>
-    </section>
+
+    </main>
+
 
     <div class="hint">
-        I DO NOT TAKE CREDIBILITY FOR THESE PORTS
+        move your mouse
     </div>
 
+
     <script>
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
+
+        /* =========================================================
+           FEATURE CARDS
+           =========================================================
+
+           CHANGE YOUR CARDS HERE.
+
+           image:
+             Paste an IMAGE URL between the quotes.
+
+           title:
+             Changes the card title.
+
+           description:
+             Changes the smaller text.
+
+           Example:
+
+           {
+               image: "https://example.com/image.png",
+               title: "Something",
+               description: "Your description."
+           }
+
+           ========================================================= */
+
+        const features = [
+
+            {
+                image: "PASTE_IMAGE_URL_HERE",
+                title: "Feature One",
+                description: "Change this text."
+            },
+
+            {
+                image: "PASTE_IMAGE_URL_HERE",
+                title: "Feature Two",
+                description: "Change this text."
+            },
+
+            {
+                image: "PASTE_IMAGE_URL_HERE",
+                title: "Feature Three",
+                description: "Change this text."
+            },
+
+            {
+                image: "PASTE_IMAGE_URL_HERE",
+                title: "Feature Four",
+                description: "Change this text."
+            }
+
+        ];
+
+
+        /* =========================================================
+           GENERATE FEATURE CARDS
+           ========================================================= */
+
+        const featureGrid =
+            document.getElementById(
+                "featureGrid"
+            );
+
+        features.forEach(
+            (feature) => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+                card.className =
+                    "feature-card";
+
+                card.innerHTML = `
+
+                    <img
+                        class="feature-image"
+                        src="${feature.image}"
+                        alt="${feature.title}"
+                        onerror="
+                            this.style.display='none';
+                        "
+                    >
+
+                    <div
+                        class="feature-overlay">
+                    </div>
+
+                    <div
+                        class="feature-content">
+
+                        <h3
+                            class="feature-name">
+                            ${feature.title}
+                        </h3>
+
+                        <p
+                            class="feature-description">
+                            ${feature.description}
+                        </p>
+
+                    </div>
+                `;
+
+                featureGrid.appendChild(
+                    card
+                );
+            }
+        );
+
+
+        /* =========================================================
+           PARTICLE CANVAS
+           ========================================================= */
+
+        const canvas =
+            document.getElementById(
+                "canvas"
+            );
+
+        const ctx =
+            canvas.getContext(
+                "2d"
+            );
 
         let width = 0;
         let height = 0;
@@ -247,62 +615,68 @@
             active: false
         };
 
-        /* =========================================================
-           SETTINGS
-           ========================================================= */
 
-        /*
-            Change these if you want to tune the particle effect.
-        */
+        /* =========================================================
+           PARTICLE SETTINGS
+           ========================================================= */
 
         const PARTICLE_SPACING = 5;
 
-        // Smaller = fewer dots react to the mouse.
+        // Smaller value = tighter mouse interaction.
         const MOUSE_RADIUS = 78;
 
-        // How strongly the mouse pushes particles.
         const MOUSE_FORCE = 18;
 
-        // How quickly dots return to their original position.
         const SPRING = 0.085;
 
-        // Damping makes the sling-back smoother.
         const DAMPING = 0.82;
 
-        // Star count.
         const STAR_COUNT = 260;
 
-        // Speed of background stars.
         const STAR_SPEED = 1.8;
 
 
-        /* =========================================================
-           PARTICLES
-           ========================================================= */
-
         let particles = [];
+
         let stars = [];
 
-        /*
-            MAJIN V1
 
-            The letters are drawn to a temporary canvas and sampled
-            into points. Those points then become the actual particles.
-        */
+        const textCanvas =
+            document.createElement(
+                "canvas"
+            );
 
-        const textCanvas = document.createElement("canvas");
-        const textCtx = textCanvas.getContext("2d");
+        const textCtx =
+            textCanvas.getContext(
+                "2d"
+            );
 
+
+        /* =========================================================
+           CREATE MAJIN V1 PARTICLES
+           ========================================================= */
 
         function createTextParticles() {
 
             particles = [];
 
-            const tempWidth = Math.min(width * 0.90, 1500);
-            const tempHeight = Math.min(height * 0.45, 500);
+            const tempWidth =
+                Math.min(
+                    width * 0.90,
+                    1500
+                );
 
-            textCanvas.width = tempWidth;
-            textCanvas.height = tempHeight;
+            const tempHeight =
+                Math.min(
+                    height * 0.45,
+                    500
+                );
+
+            textCanvas.width =
+                tempWidth;
+
+            textCanvas.height =
+                tempHeight;
 
             textCtx.clearRect(
                 0,
@@ -311,42 +685,46 @@
                 tempHeight
             );
 
-            /*
-                Large bold font so the particle formation stays readable.
-            */
-
-            let fontSize = Math.min(
-                tempWidth * 0.18,
-                tempHeight * 0.60
-            );
+            let fontSize =
+                Math.min(
+                    tempWidth * 0.18,
+                    tempHeight * 0.60
+                );
 
             textCtx.font =
                 `900 ${fontSize}px Arial, Helvetica, sans-serif`;
 
-            textCtx.textAlign = "center";
-            textCtx.textBaseline = "middle";
+            textCtx.textAlign =
+                "center";
 
-            const text = "MAJIN V1";
+            textCtx.textBaseline =
+                "middle";
 
-            textCtx.fillStyle = "#ffffff";
+            textCtx.fillStyle =
+                "#ffffff";
 
             textCtx.fillText(
-                text,
+                "MAJIN V1",
                 tempWidth / 2,
                 tempHeight / 2
             );
 
-            const image = textCtx.getImageData(
-                0,
-                0,
-                tempWidth,
-                tempHeight
-            );
+            const image =
+                textCtx.getImageData(
+                    0,
+                    0,
+                    tempWidth,
+                    tempHeight
+                );
 
-            const data = image.data;
+            const data =
+                image.data;
 
-            const offsetX = (width - tempWidth) / 2;
-            const offsetY = (height - tempHeight) / 2 - 20;
+            const offsetX =
+                (width - tempWidth) / 2;
+
+            const offsetY =
+                (height - tempHeight) / 2 - 20;
 
             for (
                 let y = 0;
@@ -363,17 +741,24 @@
                     const index =
                         (y * tempWidth + x) * 4;
 
-                    const alpha = data[index + 3];
+                    const alpha =
+                        data[index + 3];
 
                     if (alpha > 140) {
 
                         particles.push({
 
-                            x: offsetX + x,
-                            y: offsetY + y,
+                            x:
+                                offsetX + x,
 
-                            homeX: offsetX + x,
-                            homeY: offsetY + y,
+                            y:
+                                offsetY + y,
+
+                            homeX:
+                                offsetX + x,
+
+                            homeY:
+                                offsetY + y,
 
                             vx: 0,
                             vy: 0,
@@ -392,19 +777,26 @@
 
 
         /* =========================================================
-           STARFIELD
+           CREATE STARS
            ========================================================= */
 
         function createStars() {
 
             stars = [];
 
-            for (let i = 0; i < STAR_COUNT; i++) {
+            for (
+                let i = 0;
+                i < STAR_COUNT;
+                i++
+            ) {
 
                 stars.push({
 
-                    x: Math.random() * width,
-                    y: Math.random() * height,
+                    x:
+                        Math.random() * width,
+
+                    y:
+                        Math.random() * height,
 
                     length:
                         Math.random() * 35 + 8,
@@ -417,6 +809,7 @@
 
                     width:
                         Math.random() * 1.2 + 0.2
+
                 });
             }
         }
@@ -428,17 +821,29 @@
 
         function resize() {
 
-            width = window.innerWidth;
-            height = window.innerHeight;
+            width =
+                window.innerWidth;
+
+            height =
+                window.innerHeight;
 
             const pixelRatio =
-                Math.min(window.devicePixelRatio || 1, 2);
+                Math.min(
+                    window.devicePixelRatio || 1,
+                    2
+                );
 
-            canvas.width = width * pixelRatio;
-            canvas.height = height * pixelRatio;
+            canvas.width =
+                width * pixelRatio;
 
-            canvas.style.width = width + "px";
-            canvas.style.height = height + "px";
+            canvas.height =
+                height * pixelRatio;
+
+            canvas.style.width =
+                width + "px";
+
+            canvas.style.height =
+                height + "px";
 
             ctx.setTransform(
                 pixelRatio,
@@ -467,9 +872,14 @@
             "mousemove",
             (event) => {
 
-                mouse.x = event.clientX;
-                mouse.y = event.clientY;
-                mouse.active = true;
+                mouse.x =
+                    event.clientX;
+
+                mouse.y =
+                    event.clientY;
+
+                mouse.active =
+                    true;
             }
         );
 
@@ -477,53 +887,58 @@
             "mouseleave",
             () => {
 
-                mouse.active = false;
+                mouse.active =
+                    false;
 
-                mouse.x = -1000;
-                mouse.y = -1000;
+                mouse.x =
+                    -1000;
+
+                mouse.y =
+                    -1000;
             }
         );
 
 
         /* =========================================================
-           PARTICLE UPDATE
+           UPDATE PARTICLES
            ========================================================= */
 
-        function updateParticle(particle) {
-
-            /*
-                First apply the spring force.
-
-                This constantly attempts to pull the particle
-                back toward the exact location where its letter
-                originally existed.
-            */
+        function updateParticle(
+            particle
+        ) {
 
             const springX =
-                (particle.homeX - particle.x) *
+                (
+                    particle.homeX -
+                    particle.x
+                ) *
                 SPRING;
 
             const springY =
-                (particle.homeY - particle.y) *
+                (
+                    particle.homeY -
+                    particle.y
+                ) *
                 SPRING;
 
-            particle.vx += springX;
-            particle.vy += springY;
+            particle.vx +=
+                springX;
+
+            particle.vy +=
+                springY;
 
 
-            /*
-                Mouse interaction.
-
-                ONLY particles inside MOUSE_RADIUS are touched.
-            */
-
-            if (mouse.active) {
+            if (
+                mouse.active
+            ) {
 
                 const dx =
-                    particle.x - mouse.x;
+                    particle.x -
+                    mouse.x;
 
                 const dy =
-                    particle.y - mouse.y;
+                    particle.y -
+                    mouse.y;
 
                 const distance =
                     Math.sqrt(
@@ -536,53 +951,47 @@
                     distance < MOUSE_RADIUS
                 ) {
 
-                    /*
-                        Normalize the direction.
-                    */
-
                     const nx =
-                        dx / distance;
+                        dx /
+                        distance;
 
                     const ny =
-                        dy / distance;
-
-
-                    /*
-                        Stronger closer to mouse.
-                    */
+                        dy /
+                        distance;
 
                     const influence =
                         1 -
-                        distance / MOUSE_RADIUS;
-
+                        distance /
+                        MOUSE_RADIUS;
 
                     const force =
                         MOUSE_FORCE *
                         influence *
                         influence;
 
+                    particle.vx +=
+                        nx *
+                        force;
 
-                    particle.vx += nx * force;
-                    particle.vy += ny * force;
+                    particle.vy +=
+                        ny *
+                        force;
                 }
             }
 
 
-            /*
-                Damping prevents the particles from flying
-                forever and creates that springy sling-back.
-            */
+            particle.vx *=
+                DAMPING;
 
-            particle.vx *= DAMPING;
-            particle.vy *= DAMPING;
+            particle.vy *=
+                DAMPING;
 
 
-            /*
-                Update position.
-            */
+            particle.x +=
+                particle.vx;
 
-            particle.x += particle.vx;
-            particle.y += particle.vy;
+            particle.y +=
+                particle.vy;
         }
 
 
@@ -592,31 +1001,46 @@
 
         function drawStars() {
 
-            for (const star of stars) {
+            for (
+                const star of stars
+            ) {
 
-                star.x += star.speed;
+                star.x +=
+                    star.speed;
 
-                if (star.x > width + 100) {
-                    star.x = -100;
+                if (
+                    star.x >
+                    width + 100
+                ) {
+
+                    star.x =
+                        -100;
+
                     star.y =
-                        Math.random() * height;
+                        Math.random() *
+                        height;
                 }
 
-                /*
-                    Slight diagonal streak.
-                */
 
                 const gradient =
                     ctx.createLinearGradient(
                         star.x,
                         star.y,
-                        star.x - star.length,
-                        star.y - star.length * 0.12
+                        star.x -
+                            star.length,
+                        star.y -
+                            star.length *
+                            0.12
                     );
 
                 gradient.addColorStop(
                     0,
-                    `rgba(255,255,255,${star.alpha})`
+                    `rgba(
+                        255,
+                        255,
+                        255,
+                        ${star.alpha}
+                    )`
                 );
 
                 gradient.addColorStop(
@@ -624,8 +1048,11 @@
                     "rgba(255,255,255,0)"
                 );
 
-                ctx.strokeStyle = gradient;
-                ctx.lineWidth = star.width;
+                ctx.strokeStyle =
+                    gradient;
+
+                ctx.lineWidth =
+                    star.width;
 
                 ctx.beginPath();
 
@@ -635,8 +1062,11 @@
                 );
 
                 ctx.lineTo(
-                    star.x - star.length,
-                    star.y - star.length * 0.12
+                    star.x -
+                        star.length,
+                    star.y -
+                        star.length *
+                        0.12
                 );
 
                 ctx.stroke();
@@ -650,22 +1080,23 @@
 
         function drawParticles() {
 
-            for (const particle of particles) {
-
-                /*
-                    Make dots subtly brighter when close
-                    to the cursor.
-                */
+            for (
+                const particle of particles
+            ) {
 
                 let glow = 0;
 
-                if (mouse.active) {
+                if (
+                    mouse.active
+                ) {
 
                     const dx =
-                        particle.x - mouse.x;
+                        particle.x -
+                        mouse.x;
 
                     const dy =
-                        particle.y - mouse.y;
+                        particle.y -
+                        mouse.y;
 
                     const distance =
                         Math.sqrt(
@@ -674,7 +1105,8 @@
                         );
 
                     if (
-                        distance < MOUSE_RADIUS
+                        distance <
+                        MOUSE_RADIUS
                     ) {
 
                         glow =
@@ -691,7 +1123,13 @@
 
 
                 ctx.fillStyle =
-                    `rgba(255,255,255,${particle.alpha * brightness})`;
+                    `rgba(
+                        255,
+                        255,
+                        255,
+                        ${particle.alpha *
+                          brightness}
+                    )`;
 
 
                 ctx.beginPath();
@@ -710,16 +1148,13 @@
 
 
         /* =========================================================
-           MAIN LOOP
+           ANIMATION
            ========================================================= */
 
         function animate() {
 
-            /*
-                Deep black background.
-            */
-
-            ctx.fillStyle = "#050608";
+            ctx.fillStyle =
+                "#050608";
 
             ctx.fillRect(
                 0,
@@ -729,10 +1164,6 @@
             );
 
 
-            /*
-                Subtle radial glow behind the title.
-            */
-
             const glow =
                 ctx.createRadialGradient(
                     width / 2,
@@ -740,7 +1171,10 @@
                     30,
                     width / 2,
                     height / 2,
-                    Math.min(width, height) * 0.55
+                    Math.min(
+                        width,
+                        height
+                    ) * 0.55
                 );
 
             glow.addColorStop(
@@ -753,7 +1187,8 @@
                 "rgba(0,0,0,0)"
             );
 
-            ctx.fillStyle = glow;
+            ctx.fillStyle =
+                glow;
 
             ctx.fillRect(
                 0,
@@ -763,25 +1198,18 @@
             );
 
 
-            /*
-                Background.
-            */
-
             drawStars();
 
 
-            /*
-                Update all text particles.
-            */
+            for (
+                const particle of particles
+            ) {
 
-            for (const particle of particles) {
-                updateParticle(particle);
+                updateParticle(
+                    particle
+                );
             }
 
-
-            /*
-                Draw title.
-            */
 
             drawParticles();
 
@@ -809,10 +1237,12 @@
                     () => {
 
                         navItems.forEach(
-                            (nav) =>
+                            (nav) => {
+
                                 nav.classList.remove(
                                     "active"
-                                )
+                                );
+                            }
                         );
 
                         item.classList.add(
@@ -830,6 +1260,7 @@
 
         resize();
         animate();
+
     </script>
 
 </body>
