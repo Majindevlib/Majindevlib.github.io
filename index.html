@@ -3,45 +3,362 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAJIN</title>
+
+    <title>MAJIN STAT LAB</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            background: #08090d;
-            color: #00e5ff;
-            font-family: Arial, sans-serif;
             min-height: 100vh;
+            background:
+                radial-gradient(circle at top right, rgba(0, 220, 255, 0.08), transparent 35%),
+                radial-gradient(circle at bottom left, rgba(120, 70, 255, 0.08), transparent 35%),
+                #080a0f;
+            color: #e8f7ff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .topbar {
+            height: 70px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            border-bottom: 1px solid #1d2733;
+            background: rgba(8, 10, 15, 0.92);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .box {
-            text-align: center;
-            border: 1px solid #00e5ff;
-            padding: 40px;
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #00e5ff;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #9fb1bd;
+            font-size: 13px;
+        }
+
+        .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #39ff88;
+            box-shadow: 0 0 12px #39ff88;
+        }
+
+        .layout {
+            display: flex;
+            min-height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 235px;
+            border-right: 1px solid #1d2733;
+            padding: 22px 14px;
+            background: rgba(10, 13, 19, 0.95);
+        }
+
+        .section-title {
+            color: #637481;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            margin: 8px 12px 12px;
+            text-transform: uppercase;
+        }
+
+        .nav-btn {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            color: #9fb1bd;
+            text-align: left;
+            padding: 13px 14px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background: #101a24;
+            color: #00e5ff;
+        }
+
+        .main {
+            flex: 1;
+            padding: 35px;
+            overflow-y: auto;
+        }
+
+        .hero {
+            margin-bottom: 30px;
+        }
+
+        .hero h1 {
+            margin: 0;
+            font-size: 36px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            margin-top: 8px;
+            color: #71808c;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background: rgba(13, 17, 24, 0.95);
+            border: 1px solid #1d2733;
             border-radius: 12px;
-            background: #101218;
-            box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
+            padding: 20px;
         }
 
-        h1 {
-            margin: 0 0 10px;
-            font-size: 48px;
+        .card-label {
+            color: #71808c;
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        p {
-            color: #9ca3af;
+        .card-value {
+            font-size: 25px;
+            font-weight: 700;
+        }
+
+        .cyan {
+            color: #00e5ff;
+        }
+
+        .green {
+            color: #39ff88;
+        }
+
+        .purple {
+            color: #a879ff;
+        }
+
+        .panel {
+            background: rgba(13, 17, 24, 0.96);
+            border: 1px solid #1d2733;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .panel h2 {
+            margin: 0 0 6px;
+            font-size: 18px;
+        }
+
+        .panel-sub {
+            color: #71808c;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .bot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .bot {
+            border: 1px solid #22303d;
+            background: #0b1016;
+            border-radius: 10px;
+            padding: 18px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .bot:hover {
+            border-color: #00e5ff;
+            transform: translateY(-2px);
+        }
+
+        .bot-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        .bot-text {
+            color: #71808c;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .notice {
+            border-left: 3px solid #00e5ff;
+            background: #0b141b;
+            padding: 14px 16px;
+            border-radius: 7px;
+            color: #8fa5b2;
+            font-size: 13px;
+        }
+
+        @media (max-width: 1000px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sidebar {
+                width: 190px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                border-right: 0;
+                border-bottom: 1px solid #1d2733;
+            }
+
+            .grid,
+            .bot-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="box">
-        <h1>MAJIN</h1>
-        <p>MAJIN STAT LAB — ONLINE</p>
+    <header class="topbar">
+        <div class="logo">MAJIN</div>
+
+        <div class="status">
+            <div class="dot"></div>
+            SIMULATION ONLINE
+        </div>
+    </header>
+
+    <div class="layout">
+
+        <aside class="sidebar">
+
+            <div class="section-title">Navigation</div>
+
+            <button class="nav-btn active">Dashboard</button>
+            <button class="nav-btn">Statistics</button>
+            <button class="nav-btn">Bot Center</button>
+            <button class="nav-btn">System</button>
+
+            <div class="section-title">System</div>
+
+            <button class="nav-btn">About MAJIN</button>
+
+        </aside>
+
+        <main class="main">
+
+            <section class="hero">
+                <h1>MAJIN STAT LAB</h1>
+                <p>Local TikTok statistics simulation dashboard.</p>
+            </section>
+
+            <section class="grid">
+
+                <div class="card">
+                    <div class="card-label">Engine</div>
+                    <div class="card-value green">ONLINE</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">Mode</div>
+                    <div class="card-value cyan">DEMO</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">Requests</div>
+                    <div class="card-value">1,284</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-label">Version</div>
+                    <div class="card-value purple">2.0</div>
+                </div>
+
+            </section>
+
+            <section class="panel">
+
+                <h2>Bot Center</h2>
+                <div class="panel-sub">
+                    Select a simulation module.
+                </div>
+
+                <div class="bot-grid">
+
+                    <div class="bot">
+                        <div class="bot-title cyan">View Bot</div>
+                        <div class="bot-text">
+                            Simulates a TikTok video view process.
+                        </div>
+                    </div>
+
+                    <div class="bot">
+                        <div class="bot-title cyan">Like Bot</div>
+                        <div class="bot-text">
+                            Simulates TikTok engagement activity.
+                        </div>
+                    </div>
+
+                    <div class="bot">
+                        <div class="bot-title purple">Follow Bot</div>
+                        <div class="bot-text">
+                            Simulates follower activity.
+                        </div>
+                    </div>
+
+                    <div class="bot">
+                        <div class="bot-title green">Live View Bot</div>
+                        <div class="bot-text">
+                            Simulates a TikTok LIVE viewer session.
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <div class="notice">
+                ⚠ This website is a local visual simulation. No real views,
+                likes, follows, or external actions are performed.
+            </div>
+
+        </main>
+
     </div>
 
 </body>
