@@ -4,249 +4,202 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>MAJIN STAT LAB</title>
+    <title>MAJIN V1</title>
 
     <style>
         * {
             box-sizing: border-box;
         }
 
+        html,
         body {
             margin: 0;
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at top right, rgba(0, 220, 255, 0.08), transparent 35%),
-                radial-gradient(circle at bottom left, rgba(120, 70, 255, 0.08), transparent 35%),
-                #080a0f;
-            color: #e8f7ff;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #050608;
             font-family: Arial, Helvetica, sans-serif;
         }
 
-        .topbar {
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 28px;
-            border-bottom: 1px solid #1d2733;
-            background: rgba(8, 10, 15, 0.92);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
+        canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* =========================================================
+           TOP NAV
+           ========================================================= */
+
+        .nav {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+
             z-index: 10;
-        }
 
-        .logo {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: #00e5ff;
-        }
-
-        .status {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #9fb1bd;
+
+            padding: 8px;
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+
+            background: rgba(16, 18, 22, 0.72);
+
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.35),
+                inset 0 1px rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-item {
+            border: 0;
+            outline: 0;
+
+            padding: 10px 16px;
+
+            border-radius: 13px;
+
+            background: transparent;
+            color: rgba(255, 255, 255, 0.65);
+
+            font-size: 14px;
+            font-weight: 500;
+
+            cursor: pointer;
+
+            transition:
+                color 0.2s ease,
+                background 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .nav-item:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.07);
+            transform: translateY(-1px);
+        }
+
+        .nav-item.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.10);
+        }
+
+        .version {
+            margin-left: 5px;
+            padding: 8px 10px;
+
+            color: rgba(255, 255, 255, 0.42);
+
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .profile {
+            width: 34px;
+            height: 34px;
+
+            display: grid;
+            place-items: center;
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+
+            color: rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.04);
+
             font-size: 13px;
         }
 
-        .dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: #39ff88;
-            box-shadow: 0 0 12px #39ff88;
-        }
-
-        .layout {
-            display: flex;
-            min-height: calc(100vh - 70px);
-        }
-
-        .sidebar {
-            width: 235px;
-            border-right: 1px solid #1d2733;
-            padding: 22px 14px;
-            background: rgba(10, 13, 19, 0.95);
-        }
-
-        .section-title {
-            color: #637481;
-            font-size: 11px;
-            letter-spacing: 1.5px;
-            margin: 8px 12px 12px;
-            text-transform: uppercase;
-        }
-
-        .nav-btn {
-            width: 100%;
-            border: 0;
-            background: transparent;
-            color: #9fb1bd;
-            text-align: left;
-            padding: 13px 14px;
-            margin-bottom: 6px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 14px;
-        }
-
-        .nav-btn:hover,
-        .nav-btn.active {
-            background: #101a24;
-            color: #00e5ff;
-        }
-
-        .main {
-            flex: 1;
-            padding: 35px;
-            overflow-y: auto;
-        }
+        /* =========================================================
+           CENTER CONTENT
+           ========================================================= */
 
         .hero {
-            margin-bottom: 30px;
+            position: fixed;
+            inset: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            pointer-events: none;
+            z-index: 5;
         }
 
-        .hero h1 {
-            margin: 0;
-            font-size: 36px;
-            letter-spacing: -1px;
+        .hero-content {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .hero p {
-            margin-top: 8px;
-            color: #71808c;
-        }
+        .subtitle {
+            position: absolute;
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
+            top: calc(50% + 110px);
 
-        .card {
-            background: rgba(13, 17, 24, 0.95);
-            border: 1px solid #1d2733;
-            border-radius: 12px;
-            padding: 20px;
-        }
+            color: rgba(255, 255, 255, 0.32);
 
-        .card-label {
-            color: #71808c;
             font-size: 12px;
-            margin-bottom: 10px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+
+            user-select: none;
         }
 
-        .card-value {
-            font-size: 25px;
-            font-weight: 700;
-        }
+        /* =========================================================
+           BOTTOM HINT
+           ========================================================= */
 
-        .cyan {
-            color: #00e5ff;
-        }
+        .hint {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
 
-        .green {
-            color: #39ff88;
-        }
+            transform: translateX(-50%);
 
-        .purple {
-            color: #a879ff;
-        }
+            z-index: 10;
 
-        .panel {
-            background: rgba(13, 17, 24, 0.96);
-            border: 1px solid #1d2733;
-            border-radius: 12px;
-            padding: 22px;
-            margin-bottom: 20px;
-        }
+            color: rgba(255, 255, 255, 0.22);
 
-        .panel h2 {
-            margin: 0 0 6px;
-            font-size: 18px;
-        }
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
 
-        .panel-sub {
-            color: #71808c;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-
-        .bot-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
-
-        .bot {
-            border: 1px solid #22303d;
-            background: #0b1016;
-            border-radius: 10px;
-            padding: 18px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .bot:hover {
-            border-color: #00e5ff;
-            transform: translateY(-2px);
-        }
-
-        .bot-title {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 7px;
-        }
-
-        .bot-text {
-            color: #71808c;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .notice {
-            border-left: 3px solid #00e5ff;
-            background: #0b141b;
-            padding: 14px 16px;
-            border-radius: 7px;
-            color: #8fa5b2;
-            font-size: 13px;
-        }
-
-        @media (max-width: 1000px) {
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .sidebar {
-                width: 190px;
-            }
+            pointer-events: none;
+            user-select: none;
         }
 
         @media (max-width: 700px) {
-            .layout {
-                flex-direction: column;
+            .nav {
+                gap: 2px;
+                padding: 6px;
             }
 
-            .sidebar {
-                width: 100%;
-                border-right: 0;
-                border-bottom: 1px solid #1d2733;
+            .nav-item {
+                padding: 9px 10px;
+                font-size: 12px;
             }
 
-            .grid,
-            .bot-grid {
-                grid-template-columns: 1fr;
+            .version {
+                display: none;
             }
 
-            .main {
-                padding: 20px;
+            .subtitle {
+                top: calc(50% + 80px);
+                font-size: 9px;
             }
         }
     </style>
@@ -254,112 +207,630 @@
 
 <body>
 
-    <header class="topbar">
-        <div class="logo">MAJIN</div>
+    <canvas id="canvas"></canvas>
 
-        <div class="status">
-            <div class="dot"></div>
-            SIMULATION ONLINE
-        </div>
-    </header>
+    <nav class="nav">
+        <button class="nav-item active">Home</button>
+        <button class="nav-item">Study</button>
+        <button class="nav-item">Media</button>
+        <button class="nav-item">More</button>
 
-    <div class="layout">
+        <div class="version">v1.0</div>
 
-        <aside class="sidebar">
+        <div class="profile">◉</div>
+    </nav>
 
-            <div class="section-title">Navigation</div>
+    <section class="hero">
+        <div class="hero-content">
 
-            <button class="nav-btn active">Dashboard</button>
-            <button class="nav-btn">Statistics</button>
-            <button class="nav-btn">Bot Center</button>
-            <button class="nav-btn">System</button>
-
-            <div class="section-title">System</div>
-
-            <button class="nav-btn">About MAJIN</button>
-
-        </aside>
-
-        <main class="main">
-
-            <section class="hero">
-                <h1>MAJIN STAT LAB</h1>
-                <p>Local TikTok statistics simulation dashboard.</p>
-            </section>
-
-            <section class="grid">
-
-                <div class="card">
-                    <div class="card-label">Engine</div>
-                    <div class="card-value green">ONLINE</div>
-                </div>
-
-                <div class="card">
-                    <div class="card-label">Mode</div>
-                    <div class="card-value cyan">DEMO</div>
-                </div>
-
-                <div class="card">
-                    <div class="card-label">Requests</div>
-                    <div class="card-value">1,284</div>
-                </div>
-
-                <div class="card">
-                    <div class="card-label">Version</div>
-                    <div class="card-value purple">2.0</div>
-                </div>
-
-            </section>
-
-            <section class="panel">
-
-                <h2>Bot Center</h2>
-                <div class="panel-sub">
-                    Select a simulation module.
-                </div>
-
-                <div class="bot-grid">
-
-                    <div class="bot">
-                        <div class="bot-title cyan">View Bot</div>
-                        <div class="bot-text">
-                            Simulates a TikTok video view process.
-                        </div>
-                    </div>
-
-                    <div class="bot">
-                        <div class="bot-title cyan">Like Bot</div>
-                        <div class="bot-text">
-                            Simulates TikTok engagement activity.
-                        </div>
-                    </div>
-
-                    <div class="bot">
-                        <div class="bot-title purple">Follow Bot</div>
-                        <div class="bot-text">
-                            Simulates follower activity.
-                        </div>
-                    </div>
-
-                    <div class="bot">
-                        <div class="bot-title green">Live View Bot</div>
-                        <div class="bot-text">
-                            Simulates a TikTok LIVE viewer session.
-                        </div>
-                    </div>
-
-                </div>
-
-            </section>
-
-            <div class="notice">
-                ⚠ This website is a local visual simulation. No real views,
-                likes, follows, or external actions are performed.
+            <div class="subtitle">
+                MAJIN NETWORK
             </div>
 
-        </main>
+        </div>
+    </section>
 
+    <div class="hint">
+        move your mouse
     </div>
+
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        let width = 0;
+        let height = 0;
+
+        const mouse = {
+            x: -1000,
+            y: -1000,
+            active: false
+        };
+
+        /* =========================================================
+           SETTINGS
+           ========================================================= */
+
+        /*
+            Change these if you want to tune the particle effect.
+        */
+
+        const PARTICLE_SPACING = 5;
+
+        // Smaller = fewer dots react to the mouse.
+        const MOUSE_RADIUS = 78;
+
+        // How strongly the mouse pushes particles.
+        const MOUSE_FORCE = 18;
+
+        // How quickly dots return to their original position.
+        const SPRING = 0.085;
+
+        // Damping makes the sling-back smoother.
+        const DAMPING = 0.82;
+
+        // Star count.
+        const STAR_COUNT = 260;
+
+        // Speed of background stars.
+        const STAR_SPEED = 1.8;
+
+
+        /* =========================================================
+           PARTICLES
+           ========================================================= */
+
+        let particles = [];
+        let stars = [];
+
+        /*
+            MAJIN V1
+
+            The letters are drawn to a temporary canvas and sampled
+            into points. Those points then become the actual particles.
+        */
+
+        const textCanvas = document.createElement("canvas");
+        const textCtx = textCanvas.getContext("2d");
+
+
+        function createTextParticles() {
+
+            particles = [];
+
+            const tempWidth = Math.min(width * 0.90, 1500);
+            const tempHeight = Math.min(height * 0.45, 500);
+
+            textCanvas.width = tempWidth;
+            textCanvas.height = tempHeight;
+
+            textCtx.clearRect(
+                0,
+                0,
+                tempWidth,
+                tempHeight
+            );
+
+            /*
+                Large bold font so the particle formation stays readable.
+            */
+
+            let fontSize = Math.min(
+                tempWidth * 0.18,
+                tempHeight * 0.60
+            );
+
+            textCtx.font =
+                `900 ${fontSize}px Arial, Helvetica, sans-serif`;
+
+            textCtx.textAlign = "center";
+            textCtx.textBaseline = "middle";
+
+            const text = "MAJIN V1";
+
+            textCtx.fillStyle = "#ffffff";
+
+            textCtx.fillText(
+                text,
+                tempWidth / 2,
+                tempHeight / 2
+            );
+
+            const image = textCtx.getImageData(
+                0,
+                0,
+                tempWidth,
+                tempHeight
+            );
+
+            const data = image.data;
+
+            const offsetX = (width - tempWidth) / 2;
+            const offsetY = (height - tempHeight) / 2 - 20;
+
+            for (
+                let y = 0;
+                y < tempHeight;
+                y += PARTICLE_SPACING
+            ) {
+
+                for (
+                    let x = 0;
+                    x < tempWidth;
+                    x += PARTICLE_SPACING
+                ) {
+
+                    const index =
+                        (y * tempWidth + x) * 4;
+
+                    const alpha = data[index + 3];
+
+                    if (alpha > 140) {
+
+                        particles.push({
+
+                            x: offsetX + x,
+                            y: offsetY + y,
+
+                            homeX: offsetX + x,
+                            homeY: offsetY + y,
+
+                            vx: 0,
+                            vy: 0,
+
+                            size:
+                                Math.random() * 1.2 + 1.6,
+
+                            alpha:
+                                Math.random() * 0.25 + 0.75
+
+                        });
+                    }
+                }
+            }
+        }
+
+
+        /* =========================================================
+           STARFIELD
+           ========================================================= */
+
+        function createStars() {
+
+            stars = [];
+
+            for (let i = 0; i < STAR_COUNT; i++) {
+
+                stars.push({
+
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+
+                    length:
+                        Math.random() * 35 + 8,
+
+                    speed:
+                        Math.random() * STAR_SPEED + 0.25,
+
+                    alpha:
+                        Math.random() * 0.55 + 0.10,
+
+                    width:
+                        Math.random() * 1.2 + 0.2
+                });
+            }
+        }
+
+
+        /* =========================================================
+           RESIZE
+           ========================================================= */
+
+        function resize() {
+
+            width = window.innerWidth;
+            height = window.innerHeight;
+
+            const pixelRatio =
+                Math.min(window.devicePixelRatio || 1, 2);
+
+            canvas.width = width * pixelRatio;
+            canvas.height = height * pixelRatio;
+
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
+
+            ctx.setTransform(
+                pixelRatio,
+                0,
+                0,
+                pixelRatio,
+                0,
+                0
+            );
+
+            createStars();
+            createTextParticles();
+        }
+
+        window.addEventListener(
+            "resize",
+            resize
+        );
+
+
+        /* =========================================================
+           MOUSE
+           ========================================================= */
+
+        window.addEventListener(
+            "mousemove",
+            (event) => {
+
+                mouse.x = event.clientX;
+                mouse.y = event.clientY;
+                mouse.active = true;
+            }
+        );
+
+        window.addEventListener(
+            "mouseleave",
+            () => {
+
+                mouse.active = false;
+
+                mouse.x = -1000;
+                mouse.y = -1000;
+            }
+        );
+
+
+        /* =========================================================
+           PARTICLE UPDATE
+           ========================================================= */
+
+        function updateParticle(particle) {
+
+            /*
+                First apply the spring force.
+
+                This constantly attempts to pull the particle
+                back toward the exact location where its letter
+                originally existed.
+            */
+
+            const springX =
+                (particle.homeX - particle.x) *
+                SPRING;
+
+            const springY =
+                (particle.homeY - particle.y) *
+                SPRING;
+
+            particle.vx += springX;
+            particle.vy += springY;
+
+
+            /*
+                Mouse interaction.
+
+                ONLY particles inside MOUSE_RADIUS are touched.
+            */
+
+            if (mouse.active) {
+
+                const dx =
+                    particle.x - mouse.x;
+
+                const dy =
+                    particle.y - mouse.y;
+
+                const distance =
+                    Math.sqrt(
+                        dx * dx +
+                        dy * dy
+                    );
+
+                if (
+                    distance > 0 &&
+                    distance < MOUSE_RADIUS
+                ) {
+
+                    /*
+                        Normalize the direction.
+                    */
+
+                    const nx =
+                        dx / distance;
+
+                    const ny =
+                        dy / distance;
+
+
+                    /*
+                        Stronger closer to mouse.
+                    */
+
+                    const influence =
+                        1 -
+                        distance / MOUSE_RADIUS;
+
+
+                    const force =
+                        MOUSE_FORCE *
+                        influence *
+                        influence;
+
+
+                    particle.vx += nx * force;
+                    particle.vy += ny * force;
+                }
+            }
+
+
+            /*
+                Damping prevents the particles from flying
+                forever and creates that springy sling-back.
+            */
+
+            particle.vx *= DAMPING;
+            particle.vy *= DAMPING;
+
+
+            /*
+                Update position.
+            */
+
+            particle.x += particle.vx;
+            particle.y += particle.vy;
+        }
+
+
+        /* =========================================================
+           DRAW STARS
+           ========================================================= */
+
+        function drawStars() {
+
+            for (const star of stars) {
+
+                star.x += star.speed;
+
+                if (star.x > width + 100) {
+                    star.x = -100;
+                    star.y =
+                        Math.random() * height;
+                }
+
+                /*
+                    Slight diagonal streak.
+                */
+
+                const gradient =
+                    ctx.createLinearGradient(
+                        star.x,
+                        star.y,
+                        star.x - star.length,
+                        star.y - star.length * 0.12
+                    );
+
+                gradient.addColorStop(
+                    0,
+                    `rgba(255,255,255,${star.alpha})`
+                );
+
+                gradient.addColorStop(
+                    1,
+                    "rgba(255,255,255,0)"
+                );
+
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = star.width;
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    star.x,
+                    star.y
+                );
+
+                ctx.lineTo(
+                    star.x - star.length,
+                    star.y - star.length * 0.12
+                );
+
+                ctx.stroke();
+            }
+        }
+
+
+        /* =========================================================
+           DRAW PARTICLES
+           ========================================================= */
+
+        function drawParticles() {
+
+            for (const particle of particles) {
+
+                /*
+                    Make dots subtly brighter when close
+                    to the cursor.
+                */
+
+                let glow = 0;
+
+                if (mouse.active) {
+
+                    const dx =
+                        particle.x - mouse.x;
+
+                    const dy =
+                        particle.y - mouse.y;
+
+                    const distance =
+                        Math.sqrt(
+                            dx * dx +
+                            dy * dy
+                        );
+
+                    if (
+                        distance < MOUSE_RADIUS
+                    ) {
+
+                        glow =
+                            1 -
+                            distance /
+                            MOUSE_RADIUS;
+                    }
+                }
+
+
+                const brightness =
+                    0.75 +
+                    glow * 0.25;
+
+
+                ctx.fillStyle =
+                    `rgba(255,255,255,${particle.alpha * brightness})`;
+
+
+                ctx.beginPath();
+
+                ctx.arc(
+                    particle.x,
+                    particle.y,
+                    particle.size,
+                    0,
+                    Math.PI * 2
+                );
+
+                ctx.fill();
+            }
+        }
+
+
+        /* =========================================================
+           MAIN LOOP
+           ========================================================= */
+
+        function animate() {
+
+            /*
+                Deep black background.
+            */
+
+            ctx.fillStyle = "#050608";
+
+            ctx.fillRect(
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            /*
+                Subtle radial glow behind the title.
+            */
+
+            const glow =
+                ctx.createRadialGradient(
+                    width / 2,
+                    height / 2,
+                    30,
+                    width / 2,
+                    height / 2,
+                    Math.min(width, height) * 0.55
+                );
+
+            glow.addColorStop(
+                0,
+                "rgba(255,255,255,0.025)"
+            );
+
+            glow.addColorStop(
+                1,
+                "rgba(0,0,0,0)"
+            );
+
+            ctx.fillStyle = glow;
+
+            ctx.fillRect(
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            /*
+                Background.
+            */
+
+            drawStars();
+
+
+            /*
+                Update all text particles.
+            */
+
+            for (const particle of particles) {
+                updateParticle(particle);
+            }
+
+
+            /*
+                Draw title.
+            */
+
+            drawParticles();
+
+
+            requestAnimationFrame(
+                animate
+            );
+        }
+
+
+        /* =========================================================
+           NAV BUTTONS
+           ========================================================= */
+
+        const navItems =
+            document.querySelectorAll(
+                ".nav-item"
+            );
+
+        navItems.forEach(
+            (item) => {
+
+                item.addEventListener(
+                    "click",
+                    () => {
+
+                        navItems.forEach(
+                            (nav) =>
+                                nav.classList.remove(
+                                    "active"
+                                )
+                        );
+
+                        item.classList.add(
+                            "active"
+                        );
+                    }
+                );
+            }
+        );
+
+
+        /* =========================================================
+           START
+           ========================================================= */
+
+        resize();
+        animate();
+    </script>
 
 </body>
 </html>
