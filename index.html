@@ -1,1788 +1,1251 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>MAJIN V1</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAJIN V1</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    background: #050608;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #050608;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* =========================
+   NAV
+========================= */
+
+.nav {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 8px;
+
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+
+    background: rgba(15,17,21,.72);
+    backdrop-filter: blur(16px);
+
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.4),
+        inset 0 1px rgba(255,255,255,.04);
+}
+
+.nav-item {
+    border: 0;
+    background: transparent;
+    color: rgba(255,255,255,.6);
+
+    padding: 10px 16px;
+    border-radius: 12px;
+
+    cursor: pointer;
+    font-size: 13px;
+
+    transition: .2s ease;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: white;
+    background: rgba(255,255,255,.08);
+}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            background: #050608;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background: #050608;
-            color: white;
-            font-family: Arial, Helvetica, sans-serif;
-            overflow-x: hidden;
-        }
+.version {
+    color: rgba(255,255,255,.35);
+    font-size: 11px;
+    margin: 0 5px;
+}
 
-        canvas {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            display: block;
-            z-index: 0;
-            pointer-events: none;
-        }
+/* =========================
+   HERO
+========================= */
 
-        /* =========================================================
-           NAVIGATION
-           ========================================================= */
+.hero {
+    position: relative;
+    z-index: 5;
 
-        .nav {
-            position: fixed;
-            top: 16px;
-            left: 50%;
-            transform: translateX(-50%);
+    min-height: 100vh;
 
-            z-index: 50;
+    display: flex;
+    flex-direction: column;
 
-            display: flex;
-            align-items: center;
-            gap: 8px;
+    align-items: center;
+    justify-content: center;
 
-            padding: 8px;
+    padding: 110px 20px 80px;
 
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
+    text-align: center;
+}
 
-            background: rgba(16, 18, 22, 0.72);
+.hero-subtitle {
+    margin-top: 210px;
 
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: lowercase;
 
-            box-shadow:
-                0 10px 40px rgba(0, 0, 0, 0.35),
-                inset 0 1px rgba(255, 255, 255, 0.04);
-        }
+    color: rgba(255,255,255,.35);
+}
 
-        .nav-item {
-            border: 0;
-            outline: 0;
+.scroll-cue {
+    position: absolute;
+    bottom: 28px;
 
-            padding: 10px 16px;
+    color: rgba(255,255,255,.2);
 
-            border-radius: 13px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
 
-            background: transparent;
-            color: rgba(255, 255, 255, 0.65);
+    animation: float 2s ease-in-out infinite;
+}
 
-            font-size: 14px;
-            font-weight: 500;
+@keyframes float {
+    0%,100% {
+        transform: translateY(0);
+    }
 
-            cursor: pointer;
+    50% {
+        transform: translateY(6px);
+    }
+}
 
-            transition:
-                color 0.2s ease,
-                background 0.2s ease,
-                transform 0.2s ease;
-        }
+/* =========================
+   FEATURES
+========================= */
 
-        .nav-item:hover {
-            color: white;
-            background: rgba(255, 255, 255, 0.07);
-            transform: translateY(-1px);
-        }
+.feature-section {
+    position: relative;
+    z-index: 6;
 
-        .nav-item.active {
-            color: white;
-            background: rgba(255, 255, 255, 0.10);
-        }
+    min-height: 100vh;
 
-        .version {
-            margin-left: 5px;
-            padding: 8px 10px;
+    padding:
+        120px
+        0
+        180px;
 
-            color: rgba(255, 255, 255, 0.42);
+    width: 100%;
+}
 
-            font-size: 12px;
-            font-weight: 600;
-        }
+.feature-heading {
+    width: min(1100px, 90vw);
+    margin: 0 auto;
+}
 
-        .profile {
-            width: 34px;
-            height: 34px;
+.feature-title {
+    margin: 0;
 
-            display: grid;
-            place-items: center;
+    font-size: clamp(38px, 5vw, 68px);
+    font-weight: 850;
 
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 50%;
+    letter-spacing: -3px;
+    line-height: .95;
+}
 
-            color: rgba(255, 255, 255, 0.65);
-            background: rgba(255, 255, 255, 0.04);
+.feature-coming {
+    margin-top: 8px;
 
-            font-size: 13px;
-        }
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 800;
 
-        /* =========================================================
-           HERO / FIRST SCREEN
-           ========================================================= */
+    letter-spacing: -2px;
 
-        .hero {
-            position: relative;
-            z-index: 5;
+    color: rgba(255,255,255,.3);
+}
 
-            min-height: 100vh;
+.feature-description {
+    max-width: 500px;
+    margin-top: 18px;
 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+    color: rgba(255,255,255,.35);
 
-            padding:
-                110px
-                20px
-                80px;
+    font-size: 13px;
+    line-height: 1.6;
+}
 
-            text-align: center;
-        }
+/* =========================
+   CAROUSEL
+========================= */
 
-        .hero-subtitle {
-            margin-top: 120px;
+.carousel-window {
+    position: relative;
 
-            color: rgba(255, 255, 255, 0.34);
+    width: 100%;
 
-            font-size: 13px;
-            letter-spacing: 4px;
-            text-transform: lowercase;
-        }
+    margin-top: 50px;
 
-        .scroll-cue {
-            position: absolute;
+    overflow: hidden;
+}
 
-            bottom: 28px;
-            left: 50%;
+.carousel-viewport {
+    width: 43%;
+    margin-left: 33.33%;
 
-            transform: translateX(-50%);
+    overflow: hidden;
+}
 
-            color: rgba(255, 255, 255, 0.18);
+.carousel-track {
+    display: flex;
+    gap: 18px;
 
-            font-size: 10px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+    width: max-content;
 
-            animation:
-                scrollFloat 2.4s ease-in-out infinite;
-        }
+    will-change: transform;
+}
 
-        @keyframes scrollFloat {
-            0%,
-            100% {
-                transform:
-                    translateX(-50%)
-                    translateY(0);
-            }
+/* =========================
+   CARDS
+========================= */
 
-            50% {
-                transform:
-                    translateX(-50%)
-                    translateY(5px);
-            }
-        }
+.feature-card {
+    position: relative;
 
-        /* =========================================================
-           FEATURE SECTION
-           ========================================================= */
+    flex: 0 0 235px;
+    height: 285px;
 
-        .feature-section {
-            position: relative;
-            z-index: 6;
+    overflow: hidden;
 
-            min-height: 95vh;
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,.08);
 
-            padding-top: 95px;
-            padding-bottom: 180px;
+    background: #0b0e13;
 
-            overflow: hidden;
-        }
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.35);
 
-        .feature-heading {
-            width: min(1100px, 92vw);
+    transition:
+        transform .25s ease,
+        border-color .25s ease;
+}
 
-            margin: 0 auto;
+.feature-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(255,255,255,.18);
+}
 
-            text-align: left;
-        }
+.feature-image {
+    width: 100%;
+    height: 175px;
 
-        .feature-title {
-            margin: 0;
+    display: block;
 
-            font-size:
-                clamp(
-                    34px,
-                    5vw,
-                    64px
-                );
+    object-fit: cover;
 
-            line-height: 0.95;
+    background:
+        linear-gradient(
+            135deg,
+            #11151b,
+            #07090d
+        );
+}
 
-            font-weight: 850;
+.feature-gradient {
+    position: absolute;
+    inset: 0;
 
-            letter-spacing: -3px;
-        }
+    background:
+        linear-gradient(
+            to bottom,
+            transparent 30%,
+            rgba(4,6,9,.98)
+        );
+}
 
-        .feature-coming {
-            margin-top: 8px;
+.feature-content {
+    position: absolute;
 
-            font-size:
-                clamp(
-                    28px,
-                    4vw,
-                    50px
-                );
+    left: 17px;
+    right: 17px;
+    bottom: 17px;
+}
 
-            line-height: 1;
+.feature-name {
+    margin: 0;
 
-            font-weight: 800;
+    font-size: 17px;
+    font-weight: 750;
+}
 
-            letter-spacing: -2px;
+.feature-description-card {
+    margin: 7px 0 0;
 
-            color:
-                rgba(255, 255, 255, 0.30);
-        }
+    color: rgba(255,255,255,.45);
 
-        .feature-description {
-            margin-top: 18px;
+    font-size: 12px;
+    line-height: 1.45;
+}
 
-            max-width: 520px;
+/* =========================
+   FADE EDGES
+========================= */
 
-            color:
-                rgba(255, 255, 255, 0.34);
+.carousel-fade-left,
+.carousel-fade-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
 
-            font-size: 13px;
-            line-height: 1.6;
-        }
+    width: 20%;
 
-        /* =========================================================
-           CAROUSEL WINDOW
-           ========================================================= */
+    z-index: 5;
+    pointer-events: none;
+}
 
-        .carousel-window {
-            position: relative;
+.carousel-fade-left {
+    left: 0;
 
-            width: 100%;
+    background:
+        linear-gradient(
+            to right,
+            #050608 5%,
+            transparent
+        );
+}
 
-            margin-top: 42px;
+.carousel-fade-right {
+    right: 0;
 
-            overflow: hidden;
-        }
+    background:
+        linear-gradient(
+            to left,
+            #050608 5%,
+            transparent
+        );
+}
 
-        /*
-            The visible area begins around 1/3 of the page
-            and extends a little beyond the 3/4 mark.
-        */
+/* =========================
+   FOOTER
+========================= */
 
-        .carousel-viewport {
-            width: 43%;
+.footer {
+    position: relative;
+    z-index: 5;
 
-            margin-left: 33.33%;
+    padding: 60px 20px 100px;
 
-            overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,.05);
 
-            position: relative;
-        }
+    text-align: center;
 
-        .carousel-track {
-            display: flex;
-            gap: 18px;
+    color: rgba(255,255,255,.2);
 
-            width: max-content;
+    font-size: 11px;
+    letter-spacing: 3px;
+}
 
-            transform: translateX(0);
+/* =========================
+   MOBILE
+========================= */
 
-            will-change: transform;
-        }
+@media (max-width: 850px) {
 
-        /* =========================================================
-           FEATURE CARDS
-           ========================================================= */
+    .carousel-viewport {
+        width: 65%;
+        margin-left: 17.5%;
+    }
 
-        .feature-card {
-            position: relative;
+    .feature-card {
+        flex-basis: 220px;
+    }
+}
 
-            flex: 0 0 235px;
+@media (max-width: 600px) {
 
-            height: 285px;
+    .nav {
+        width: calc(100% - 20px);
+        justify-content: center;
+    }
 
-            overflow: hidden;
+    .nav-item {
+        padding: 9px 10px;
+        font-size: 11px;
+    }
 
-            border: 1px solid
-                rgba(255, 255, 255, 0.08);
+    .version {
+        display: none;
+    }
 
-            border-radius: 22px;
+    .hero-subtitle {
+        margin-top: 150px;
+    }
 
-            background:
-                rgba(11, 14, 19, 0.78);
+    .feature-section {
+        padding-top: 90px;
+    }
 
-            box-shadow:
-                0 18px 50px
-                rgba(0, 0, 0, 0.28),
-                inset 0 1px
-                rgba(255, 255, 255, 0.03);
+    .carousel-viewport {
+        width: 86%;
+        margin-left: 7%;
+    }
 
-            transition:
-                transform 0.25s ease,
-                border-color 0.25s ease;
-        }
+    .feature-card {
+        flex-basis: 205px;
+        height: 255px;
+    }
 
-        .feature-card:hover {
-            transform: translateY(-7px);
-
-            border-color:
-                rgba(255, 255, 255, 0.18);
-        }
-
-        .feature-image {
-            width: 100%;
-            height: 175px;
-
-            display: block;
-
-            object-fit: cover;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #11151b,
-                    #07090d
-                );
-        }
-
-        .feature-gradient {
-            position: absolute;
-
-            inset: 0;
-
-            background:
-                linear-gradient(
-                    to bottom,
-                    transparent 32%,
-                    rgba(4, 6, 9, 0.96) 100%
-                );
-
-            pointer-events: none;
-        }
-
-        .feature-content {
-            position: absolute;
-
-            left: 17px;
-            right: 17px;
-            bottom: 17px;
-        }
-
-        .feature-name {
-            margin: 0;
-
-            font-size: 17px;
-            font-weight: 750;
-        }
-
-        .feature-description-card {
-            margin: 7px 0 0;
-
-            color:
-                rgba(255, 255, 255, 0.45);
-
-            font-size: 12px;
-            line-height: 1.45;
-        }
-
-        /* =========================================================
-           SECTION EDGE FADES
-           ========================================================= */
-
-        .carousel-fade-left,
-        .carousel-fade-right {
-            position: absolute;
-
-            top: 0;
-            bottom: 0;
-
-            width: 18%;
-
-            z-index: 3;
-
-            pointer-events: none;
-        }
-
-        .carousel-fade-left {
-            left: 0;
-
-            background:
-                linear-gradient(
-                    to right,
-                    #050608 5%,
-                    rgba(5, 6, 8, 0)
-                );
-        }
-
-        .carousel-fade-right {
-            right: 0;
-
-            background:
-                linear-gradient(
-                    to left,
-                    #050608 5%,
-                    rgba(5, 6, 8, 0)
-                );
-        }
-
-        /* =========================================================
-           FOOTER
-           ========================================================= */
-
-        .footer {
-            position: relative;
-
-            z-index: 5;
-
-            padding: 50px 20px 80px;
-
-            border-top:
-                1px solid
-                rgba(255, 255, 255, 0.05);
-
-            text-align: center;
-
-            color:
-                rgba(255, 255, 255, 0.20);
-
-            font-size: 11px;
-
-            letter-spacing: 2px;
-
-            text-transform: uppercase;
-        }
-
-        /* =========================================================
-           MOBILE
-           ========================================================= */
-
-        @media (max-width: 850px) {
-
-            .carousel-viewport {
-                width: 68%;
-
-                margin-left: 16%;
-            }
-
-            .feature-card {
-                flex-basis: 220px;
-                height: 270px;
-            }
-        }
-
-        @media (max-width: 620px) {
-
-            .nav {
-                width:
-                    calc(100% - 22px);
-
-                justify-content:
-                    center;
-            }
-
-            .nav-item {
-                padding:
-                    9px 10px;
-
-                font-size: 11px;
-            }
-
-            .version,
-            .profile {
-                display: none;
-            }
-
-            .hero {
-                min-height: 100vh;
-
-                padding:
-                    100px 18px 60px;
-            }
-
-            .hero-subtitle {
-                margin-top: 95px;
-
-                font-size: 10px;
-
-                letter-spacing: 3px;
-            }
-
-            .feature-section {
-                min-height: 100vh;
-
-                padding-top: 70px;
-            }
-
-            .feature-heading {
-                width:
-                    calc(100% - 36px);
-            }
-
-            .carousel-viewport {
-                width: 86%;
-
-                margin-left: 7%;
-            }
-
-            .feature-card {
-                flex-basis: 205px;
-                height: 255px;
-            }
-
-            .feature-image {
-                height: 150px;
-            }
-        }
-    </style>
+    .feature-image {
+        height: 150px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <!-- =========================================================
-         PARTICLE BACKGROUND
-         ========================================================= -->
+<!-- =========================
+     BACKGROUND
+========================= -->
 
-    <canvas id="canvas"></canvas>
+<canvas id="canvas"></canvas>
 
+<!-- =========================
+     NAV
+========================= -->
 
-    <!-- =========================================================
-         NAV
-         ========================================================= -->
+<nav class="nav">
 
-    <nav class="nav">
+    <button class="nav-item active">
+        Home
+    </button>
 
-        <button class="nav-item active">
-            Home
-        </button>
+    <button class="nav-item">
+        Study
+    </button>
 
-        <button class="nav-item">
-            Study
-        </button>
+    <button class="nav-item">
+        Media
+    </button>
 
-        <button class="nav-item">
-            Media
-        </button>
+    <button class="nav-item">
+        More
+    </button>
 
-        <button class="nav-item">
-            More
-        </button>
+    <div class="version">
+        V1
+    </div>
 
-        <div class="version">
-            v1.0
+</nav>
+
+<!-- =========================
+     HERO
+========================= -->
+
+<section class="hero">
+
+    <div class="hero-subtitle">
+        have fun ;)
+    </div>
+
+    <div class="scroll-cue">
+        scroll to explore
+    </div>
+
+</section>
+
+<!-- =========================
+     FEATURES
+========================= -->
+
+<section class="feature-section">
+
+    <div class="feature-heading">
+
+        <h2 class="feature-title">
+            THINGS WE FEATURE
+        </h2>
+
+        <div class="feature-coming">
+            / IS COMING
         </div>
 
-        <div class="profile">
-            ◉
-        </div>
+        <p class="feature-description">
+            A collection of things we're building,
+            experimenting with, and putting together.
+        </p>
 
-    </nav>
+    </div>
 
+    <div class="carousel-window">
 
-    <!-- =========================================================
-         HERO
-         ========================================================= -->
+        <div class="carousel-fade-left"></div>
 
-    <section class="hero">
+        <div class="carousel-viewport">
 
-        <div class="hero-subtitle">
-            have fun ;)
-        </div>
-
-        <div class="scroll-cue">
-            scroll to explore
-        </div>
-
-    </section>
-
-
-    <!-- =========================================================
-         FEATURE SECTION
-         ========================================================= -->
-
-    <section class="feature-section">
-
-        <div class="feature-heading">
-
-            <h2 class="feature-title">
-                THINGS WE FEATURE
-            </h2>
-
-            <div class="feature-coming">
-                / IS COMING
+            <div
+                class="carousel-track"
+                id="carouselTrack">
             </div>
 
-            <p class="feature-description">
-                A collection of things we're building,
-                experimenting with, and putting together.
-            </p>
-
         </div>
 
+        <div class="carousel-fade-right"></div>
 
-        <div class="carousel-window">
+    </div>
 
-            <div class="carousel-fade-left"></div>
+</section>
 
-            <div class="carousel-viewport">
+<!-- =========================
+     FOOTER
+========================= -->
 
-                <div
-                    class="carousel-track"
-                    id="carouselTrack">
-                </div>
+<footer class="footer">
+    MAJIN V1
+</footer>
 
-            </div>
+<script>
 
-            <div class="carousel-fade-right"></div>
+/* =========================================================
+   CHANGE YOUR CARDS HERE
+========================================================= */
 
-        </div>
+const features = [
 
-    </section>
+    {
+        image: "PASTE_IMAGE_URL_HERE",
+        title: "Feature One",
+        description: "Change this text."
+    },
 
+    {
+        image: "PASTE_IMAGE_URL_HERE",
+        title: "Feature Two",
+        description: "Change this text."
+    },
 
-    <!-- =========================================================
-         FOOTER
-         ========================================================= -->
+    {
+        image: "PASTE_IMAGE_URL_HERE",
+        title: "Feature Three",
+        description: "Change this text."
+    },
 
-    <footer class="footer">
-        MAJIN V1
-    </footer>
+    {
+        image: "PASTE_IMAGE_URL_HERE",
+        title: "Feature Four",
+        description: "Change this text."
+    },
 
+    {
+        image: "PASTE_IMAGE_URL_HERE",
+        title: "Feature Five",
+        description: "Change this text."
+    },
 
-    <script>
+    {
+        image: "PASTE_IMAGE_URL_HERE",
+        title: "Feature Six",
+        description: "Change this text."
+    }
 
-        /* =========================================================
-           FEATURE CARDS
-           =========================================================
+];
 
-           CHANGE YOUR CARDS HERE.
+/* =========================
+   CARD CAROUSEL
+========================= */
 
-           image:
-             Paste an image URL.
+const track =
+    document.getElementById("carouselTrack");
 
-           title:
-             Card title.
+function makeCard(feature) {
 
-           description:
-             Small text under the title.
+    const card =
+        document.createElement("article");
 
-           You can add as many cards as you want.
+    card.className = "feature-card";
 
-           ========================================================= */
+    const image =
+        document.createElement("img");
 
-        const features = [
+    image.className = "feature-image";
+    image.src = feature.image;
+    image.alt = feature.title;
 
-            {
-                image:
-                    "PASTE_IMAGE_URL_HERE",
+    image.onerror = function() {
+        this.style.opacity = "0";
+    };
 
-                title:
-                    "Feature One",
+    const gradient =
+        document.createElement("div");
 
-                description:
-                    "Change this text."
-            },
+    gradient.className =
+        "feature-gradient";
 
-            {
-                image:
-                    "PASTE_IMAGE_URL_HERE",
+    const content =
+        document.createElement("div");
 
-                title:
-                    "Feature Two",
+    content.className =
+        "feature-content";
 
-                description:
-                    "Change this text."
-            },
+    const title =
+        document.createElement("h3");
 
-            {
-                image:
-                    "PASTE_IMAGE_URL_HERE",
+    title.className =
+        "feature-name";
 
-                title:
-                    "Feature Three",
+    title.textContent =
+        feature.title;
 
-                description:
-                    "Change this text."
-            },
+    const description =
+        document.createElement("p");
 
-            {
-                image:
-                    "PASTE_IMAGE_URL_HERE",
+    description.className =
+        "feature-description-card";
 
-                title:
-                    "Feature Four",
+    description.textContent =
+        feature.description;
 
-                description:
-                    "Change this text."
-            },
+    content.appendChild(title);
+    content.appendChild(description);
 
-            {
-                image:
-                    "PASTE_IMAGE_URL_HERE",
+    card.appendChild(image);
+    card.appendChild(gradient);
+    card.appendChild(content);
 
-                title:
-                    "Feature Five",
+    return card;
+}
 
-                description:
-                    "Change this text."
-            },
+function buildCarousel() {
 
-            {
-                image:
-                    "PASTE_IMAGE_URL_HERE",
+    track.innerHTML = "";
 
-                title:
-                    "Feature Six",
+    /*
+        Duplicate the cards several times
+        to create the infinite loop.
+    */
 
-                description:
-                    "Change this text."
-            }
+    for (let i = 0; i < 4; i++) {
 
-        ];
+        features.forEach(feature => {
 
-
-        /* =========================================================
-           CAROUSEL SETTINGS
-           ========================================================= */
-
-        const CARD_SPEED = 0.55;
-
-        const CARD_GAP = 18;
-
-
-        /* =========================================================
-           CREATE CARDS
-           ========================================================= */
-
-        const track =
-            document.getElementById(
-                "carouselTrack"
+            track.appendChild(
+                makeCard(feature)
             );
 
+        });
+    }
+}
 
-        function createCard(
-            feature
+buildCarousel();
+
+let carouselX = 0;
+
+const CARD_WIDTH = 253;
+const SPEED = 0.55;
+
+function moveCards() {
+
+    carouselX -= SPEED;
+
+    const loopSize =
+        features.length * CARD_WIDTH;
+
+    if (
+        Math.abs(carouselX) >= loopSize
+    ) {
+        carouselX += loopSize;
+    }
+
+    track.style.transform =
+        `translateX(${carouselX}px)`;
+
+    requestAnimationFrame(moveCards);
+}
+
+moveCards();
+
+/* =========================
+   PARTICLE TITLE
+========================= */
+
+const canvas =
+    document.getElementById("canvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+let width = 0;
+let height = 0;
+
+const mouse = {
+    x: -1000,
+    y: -1000,
+    active: false
+};
+
+const PARTICLE_SPACING = 5;
+
+/*
+    Smaller = fewer particles react.
+*/
+
+const MOUSE_RADIUS = 70;
+
+const MOUSE_FORCE = 18;
+
+const SPRING = 0.085;
+
+const DAMPING = 0.82;
+
+const STAR_COUNT = 260;
+
+const STAR_SPEED = 1.8;
+
+let particles = [];
+let stars = [];
+
+const textCanvas =
+    document.createElement("canvas");
+
+const textCtx =
+    textCanvas.getContext("2d");
+
+/* =========================
+   CREATE TEXT
+========================= */
+
+function createParticles() {
+
+    particles = [];
+
+    const tempWidth =
+        Math.min(
+            width * .9,
+            1500
+        );
+
+    const tempHeight =
+        Math.min(
+            height * .45,
+            500
+        );
+
+    textCanvas.width =
+        tempWidth;
+
+    textCanvas.height =
+        tempHeight;
+
+    textCtx.clearRect(
+        0,
+        0,
+        tempWidth,
+        tempHeight
+    );
+
+    const fontSize =
+        Math.min(
+            tempWidth * .18,
+            tempHeight * .6
+        );
+
+    textCtx.font =
+        `900 ${fontSize}px Arial`;
+
+    textCtx.textAlign =
+        "center";
+
+    textCtx.textBaseline =
+        "middle";
+
+    textCtx.fillStyle =
+        "white";
+
+    textCtx.fillText(
+        "MAJIN V1",
+        tempWidth / 2,
+        tempHeight / 2
+    );
+
+    const image =
+        textCtx.getImageData(
+            0,
+            0,
+            tempWidth,
+            tempHeight
+        );
+
+    const data =
+        image.data;
+
+    const offsetX =
+        (width - tempWidth) / 2;
+
+    /*
+        Place the title in the upper part
+        of the hero.
+    */
+
+    const offsetY =
+        (height - tempHeight) / 2 - 130;
+
+    for (
+        let y = 0;
+        y < tempHeight;
+        y += PARTICLE_SPACING
+    ) {
+
+        for (
+            let x = 0;
+            x < tempWidth;
+            x += PARTICLE_SPACING
         ) {
 
-            const card =
-                document.createElement(
-                    "article"
-                );
-
-            card.className =
-                "feature-card";
-
-
-            const image =
-                document.createElement(
-                    "img"
-                );
-
-            image.className =
-                "feature-image";
-
-            image.src =
-                feature.image;
-
-            image.alt =
-                feature.title;
-
-
-            image.onerror =
-                function () {
-
-                    this.remove();
-
-                };
-
-
-            const gradient =
-                document.createElement(
-                    "div"
-                );
-
-            gradient.className =
-                "feature-gradient";
-
-
-            const content =
-                document.createElement(
-                    "div"
-                );
-
-            content.className =
-                "feature-content";
-
-
-            const title =
-                document.createElement(
-                    "h3"
-                );
-
-            title.className =
-                "feature-name";
-
-            title.textContent =
-                feature.title;
-
-
-            const description =
-                document.createElement(
-                    "p"
-                );
-
-            description.className =
-                "feature-description-card";
-
-            description.textContent =
-                feature.description;
-
-
-            content.appendChild(
-                title
-            );
-
-            content.appendChild(
-                description
-            );
-
-
-            card.appendChild(
-                image
-            );
-
-            card.appendChild(
-                gradient
-            );
-
-            card.appendChild(
-                content
-            );
-
-
-            return card;
-        }
-
-
-        /* =========================================================
-           DUPLICATE CARDS
-           =========================================================
-
-           The duplicated cards make the track seamless.
-        */
-
-        function populateCarousel() {
-
-            track.innerHTML = "";
-
-
-            const totalSets = 3;
-
-
-            for (
-                let set = 0;
-                set < totalSets;
-                set++
-            ) {
-
-                features.forEach(
-                    (
-                        feature
-                    ) => {
-
-                        track.appendChild(
-                            createCard(
-                                feature
-                            )
-                        );
-
-                    }
-                );
-            }
-        }
-
-
-        populateCarousel();
-
-
-        /* =========================================================
-           CAROUSEL ENGINE
-           ========================================================= */
-
-        let trackOffset = 0;
-
-
-        function getCardWidth() {
-
-            const firstCard =
-                track.querySelector(
-                    ".feature-card"
-                );
-
+            const index =
+                (y * tempWidth + x) * 4;
 
             if (
-                !firstCard
-            ) {
-                return 253;
-            }
-
-
-            return (
-                firstCard.offsetWidth +
-                CARD_GAP
-            );
-        }
-
-
-        function animateCarousel() {
-
-            trackOffset -=
-                CARD_SPEED;
-
-
-            const loopWidth =
-                features.length *
-                getCardWidth();
-
-
-            /*
-                Once the first set has moved completely
-                out of view, move it back to the end.
-
-                This makes it feel like an infinite
-                stream of cards.
-            */
-
-            if (
-                Math.abs(
-                    trackOffset
-                ) >= loopWidth
+                data[index + 3] > 140
             ) {
 
-                trackOffset +=
-                    loopWidth;
-            }
+                particles.push({
 
+                    x: offsetX + x,
+                    y: offsetY + y,
 
-            track.style.transform =
-                `translateX(${trackOffset}px)`;
+                    homeX: offsetX + x,
+                    homeY: offsetY + y,
 
+                    vx: 0,
+                    vy: 0,
 
-            requestAnimationFrame(
-                animateCarousel
-            );
-        }
-
-
-        animateCarousel();
-
-
-        /* =========================================================
-           PARTICLE TITLE
-           ========================================================= */
-
-        const canvas =
-            document.getElementById(
-                "canvas"
-            );
-
-        const ctx =
-            canvas.getContext(
-                "2d"
-            );
-
-
-        let width = 0;
-        let height = 0;
-
-
-        const mouse = {
-
-            x: -1000,
-            y: -1000,
-
-            active: false
-
-        };
-
-
-        /* =========================================================
-           PARTICLE SETTINGS
-           ========================================================= */
-
-        const PARTICLE_SPACING = 5;
-
-        /*
-            Smaller = smaller mouse reaction area.
-        */
-
-        const MOUSE_RADIUS = 70;
-
-
-        const MOUSE_FORCE = 18;
-
-        const SPRING = 0.085;
-
-        const DAMPING = 0.82;
-
-
-        const STAR_COUNT = 260;
-
-        const STAR_SPEED = 1.8;
-
-
-        let particles = [];
-
-        let stars = [];
-
-
-        const textCanvas =
-            document.createElement(
-                "canvas"
-            );
-
-        const textCtx =
-            textCanvas.getContext(
-                "2d"
-            );
-
-
-        /* =========================================================
-           TEXT PARTICLES
-           ========================================================= */
-
-        function createTextParticles() {
-
-            particles = [];
-
-
-            const tempWidth =
-                Math.min(
-                    width * 0.90,
-                    1500
-                );
-
-
-            const tempHeight =
-                Math.min(
-                    height * 0.45,
-                    500
-                );
-
-
-            textCanvas.width =
-                tempWidth;
-
-            textCanvas.height =
-                tempHeight;
-
-
-            textCtx.clearRect(
-                0,
-                0,
-                tempWidth,
-                tempHeight
-            );
-
-
-            let fontSize =
-                Math.min(
-                    tempWidth * 0.18,
-                    tempHeight * 0.60
-                );
-
-
-            textCtx.font =
-                `900 ${fontSize}px Arial, Helvetica, sans-serif`;
-
-
-            textCtx.textAlign =
-                "center";
-
-
-            textCtx.textBaseline =
-                "middle";
-
-
-            textCtx.fillStyle =
-                "#ffffff";
-
-
-            textCtx.fillText(
-                "MAJIN V1",
-                tempWidth / 2,
-                tempHeight / 2
-            );
-
-
-            const image =
-                textCtx.getImageData(
-                    0,
-                    0,
-                    tempWidth,
-                    tempHeight
-                );
-
-
-            const data =
-                image.data;
-
-
-            const offsetX =
-                (width - tempWidth) / 2;
-
-
-            const offsetY =
-                (height - tempHeight) / 2 -
-                20;
-
-
-            for (
-                let y = 0;
-                y < tempHeight;
-                y += PARTICLE_SPACING
-            ) {
-
-                for (
-                    let x = 0;
-                    x < tempWidth;
-                    x += PARTICLE_SPACING
-                ) {
-
-                    const index =
-                        (
-                            y *
-                            tempWidth +
-                            x
-                        ) *
-                        4;
-
-
-                    const alpha =
-                        data[
-                            index +
-                            3
-                        ];
-
-
-                    if (
-                        alpha > 140
-                    ) {
-
-                        particles.push({
-
-                            x:
-                                offsetX +
-                                x,
-
-                            y:
-                                offsetY +
-                                y,
-
-                            homeX:
-                                offsetX +
-                                x,
-
-                            homeY:
-                                offsetY +
-                                y,
-
-                            vx: 0,
-
-                            vy: 0,
-
-                            size:
-                                Math.random() *
-                                1.2 +
-                                1.6,
-
-                            alpha:
-                                Math.random() *
-                                0.25 +
-                                0.75
-                        });
-                    }
-                }
-            }
-        }
-
-
-        /* =========================================================
-           STARS
-           ========================================================= */
-
-        function createStars() {
-
-            stars = [];
-
-
-            for (
-                let i = 0;
-                i < STAR_COUNT;
-                i++
-            ) {
-
-                stars.push({
-
-                    x:
-                        Math.random() *
-                        width,
-
-                    y:
-                        Math.random() *
-                        height,
-
-                    length:
-                        Math.random() *
-                        35 +
-                        8,
-
-                    speed:
-                        Math.random() *
-                        STAR_SPEED +
-                        0.25,
+                    size:
+                        Math.random() * 1.2 + 1.5,
 
                     alpha:
-                        Math.random() *
-                        0.55 +
-                        0.10,
-
-                    width:
-                        Math.random() *
-                        1.2 +
-                        0.2
+                        Math.random() * .25 + .75
 
                 });
             }
         }
+    }
+}
 
+/* =========================
+   STARS
+========================= */
 
-        /* =========================================================
-           RESIZE
-           ========================================================= */
+function createStars() {
 
-        function resize() {
+    stars = [];
 
-            width =
-                window.innerWidth;
+    for (
+        let i = 0;
+        i < STAR_COUNT;
+        i++
+    ) {
 
+        stars.push({
 
-            height =
-                window.innerHeight;
+            x:
+                Math.random() * width,
 
+            y:
+                Math.random() * height,
 
-            const pixelRatio =
-                Math.min(
-                    window.devicePixelRatio ||
-                    1,
-                    2
-                );
+            length:
+                Math.random() * 35 + 8,
 
+            speed:
+                Math.random() *
+                STAR_SPEED + .25,
 
-            canvas.width =
-                width *
-                pixelRatio;
+            alpha:
+                Math.random() * .55 + .1,
 
+            width:
+                Math.random() * 1.2 + .2
 
-            canvas.height =
-                height *
-                pixelRatio;
+        });
+    }
+}
 
+/* =========================
+   RESIZE
+========================= */
 
-            canvas.style.width =
-                width +
-                "px";
+function resize() {
 
+    width =
+        window.innerWidth;
 
-            canvas.style.height =
-                height +
-                "px";
+    height =
+        window.innerHeight;
 
+    const ratio =
+        Math.min(
+            window.devicePixelRatio || 1,
+            2
+        );
 
-            ctx.setTransform(
-                pixelRatio,
-                0,
-                0,
-                pixelRatio,
-                0,
-                0
+    canvas.width =
+        width * ratio;
+
+    canvas.height =
+        height * ratio;
+
+    canvas.style.width =
+        width + "px";
+
+    canvas.style.height =
+        height + "px";
+
+    ctx.setTransform(
+        ratio,
+        0,
+        0,
+        ratio,
+        0,
+        0
+    );
+
+    createStars();
+    createParticles();
+}
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+/* =========================
+   MOUSE
+========================= */
+
+window.addEventListener(
+    "mousemove",
+    e => {
+
+        mouse.x =
+            e.clientX;
+
+        mouse.y =
+            e.clientY;
+
+        mouse.active =
+            true;
+    }
+);
+
+window.addEventListener(
+    "mouseleave",
+    () => {
+
+        mouse.active =
+            false;
+
+        mouse.x =
+            -1000;
+
+        mouse.y =
+            -1000;
+    }
+);
+
+/* =========================
+   PARTICLES
+========================= */
+
+function updateParticle(p) {
+
+    /*
+        Spring pulls the dot back
+        to its original letter.
+    */
+
+    p.vx +=
+        (p.homeX - p.x) *
+        SPRING;
+
+    p.vy +=
+        (p.homeY - p.y) *
+        SPRING;
+
+    if (mouse.active) {
+
+        const dx =
+            p.x - mouse.x;
+
+        const dy =
+            p.y - mouse.y;
+
+        const distance =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
             );
 
-
-            createStars();
-
-            createTextParticles();
-        }
-
-
-        window.addEventListener(
-            "resize",
-            resize
-        );
-
-
-        /* =========================================================
-           MOUSE
-           ========================================================= */
-
-        window.addEventListener(
-            "mousemove",
-            (
-                event
-            ) => {
-
-                mouse.x =
-                    event.clientX;
-
-                mouse.y =
-                    event.clientY;
-
-                mouse.active =
-                    true;
-            }
-        );
-
-
-        window.addEventListener(
-            "mouseleave",
-            () => {
-
-                mouse.active =
-                    false;
-
-                mouse.x =
-                    -1000;
-
-                mouse.y =
-                    -1000;
-            }
-        );
-
-
-        /* =========================================================
-           PARTICLE UPDATE
-           ========================================================= */
-
-        function updateParticle(
-            particle
+        if (
+            distance > 0 &&
+            distance < MOUSE_RADIUS
         ) {
 
-            const springX =
-                (
-                    particle.homeX -
-                    particle.x
-                ) *
-                SPRING;
+            const nx =
+                dx / distance;
 
+            const ny =
+                dy / distance;
 
-            const springY =
-                (
-                    particle.homeY -
-                    particle.y
-                ) *
-                SPRING;
+            const influence =
+                1 -
+                distance /
+                MOUSE_RADIUS;
 
+            const force =
+                MOUSE_FORCE *
+                influence *
+                influence;
 
-            particle.vx +=
-                springX;
+            p.vx +=
+                nx * force;
 
+            p.vy +=
+                ny * force;
+        }
+    }
 
-            particle.vy +=
-                springY;
+    p.vx *= DAMPING;
+    p.vy *= DAMPING;
 
+    p.x += p.vx;
+    p.y += p.vy;
+}
+
+/* =========================
+   DRAW STARS
+========================= */
+
+function drawStars() {
+
+    stars.forEach(star => {
+
+        star.x += star.speed;
+
+        if (
+            star.x >
+            width + 100
+        ) {
+
+            star.x = -100;
+
+            star.y =
+                Math.random() *
+                height;
+        }
+
+        const gradient =
+            ctx.createLinearGradient(
+                star.x,
+                star.y,
+                star.x - star.length,
+                star.y -
+                    star.length * .12
+            );
+
+        gradient.addColorStop(
+            0,
+            `rgba(
+                255,
+                255,
+                255,
+                ${star.alpha}
+            )`
+        );
+
+        gradient.addColorStop(
+            1,
+            "rgba(255,255,255,0)"
+        );
+
+        ctx.strokeStyle =
+            gradient;
+
+        ctx.lineWidth =
+            star.width;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            star.x,
+            star.y
+        );
+
+        ctx.lineTo(
+            star.x - star.length,
+            star.y -
+                star.length * .12
+        );
+
+        ctx.stroke();
+
+    });
+}
+
+/* =========================
+   DRAW PARTICLES
+========================= */
+
+function drawParticles() {
+
+    particles.forEach(p => {
+
+        let glow = 0;
+
+        if (mouse.active) {
+
+            const dx =
+                p.x - mouse.x;
+
+            const dy =
+                p.y - mouse.y;
+
+            const distance =
+                Math.sqrt(
+                    dx * dx +
+                    dy * dy
+                );
 
             if (
-                mouse.active
+                distance <
+                MOUSE_RADIUS
             ) {
 
-                const dx =
-                    particle.x -
-                    mouse.x;
+                glow =
+                    1 -
+                    distance /
+                    MOUSE_RADIUS;
+            }
+        }
 
+        const brightness =
+            .75 +
+            glow * .25;
 
-                const dy =
-                    particle.y -
-                    mouse.y;
+        ctx.fillStyle =
+            `rgba(
+                255,
+                255,
+                255,
+                ${p.alpha * brightness}
+            )`;
 
+        ctx.beginPath();
 
-                const distance =
-                    Math.sqrt(
-                        dx * dx +
-                        dy * dy
+        ctx.arc(
+            p.x,
+            p.y,
+            p.size,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+
+    });
+}
+
+/* =========================
+   ANIMATION
+========================= */
+
+function animate() {
+
+    ctx.fillStyle =
+        "#050608";
+
+    ctx.fillRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+    drawStars();
+
+    particles.forEach(
+        updateParticle
+    );
+
+    drawParticles();
+
+    requestAnimationFrame(
+        animate
+    );
+}
+
+/* =========================
+   NAV
+========================= */
+
+document
+    .querySelectorAll(".nav-item")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                document
+                    .querySelectorAll(
+                        ".nav-item"
+                    )
+                    .forEach(
+                        b =>
+                            b.classList.remove(
+                                "active"
+                            )
                     );
 
-
-                if (
-                    distance > 0 &&
-                    distance <
-                        MOUSE_RADIUS
-                ) {
-
-                    const nx =
-                        dx /
-                        distance;
-
-
-                    const ny =
-                        dy /
-                        distance;
-
-
-                    const influence =
-                        1 -
-                        distance /
-                        MOUSE_RADIUS;
-
-
-                    const force =
-                        MOUSE_FORCE *
-                        influence *
-                        influence;
-
-
-                    particle.vx +=
-                        nx *
-                        force;
-
-
-                    particle.vy +=
-                        ny *
-                        force;
-                }
-            }
-
-
-            particle.vx *=
-                DAMPING;
-
-
-            particle.vy *=
-                DAMPING;
-
-
-            particle.x +=
-                particle.vx;
-
-
-            particle.y +=
-                particle.vy;
-        }
-
-
-        /* =========================================================
-           DRAW STARS
-           ========================================================= */
-
-        function drawStars() {
-
-            for (
-                const star of stars
-            ) {
-
-                star.x +=
-                    star.speed;
-
-
-                if (
-                    star.x >
-                    width + 100
-                ) {
-
-                    star.x =
-                        -100;
-
-
-                    star.y =
-                        Math.random() *
-                        height;
-                }
-
-
-                const gradient =
-                    ctx.createLinearGradient(
-                        star.x,
-                        star.y,
-                        star.x -
-                            star.length,
-                        star.y -
-                            star.length *
-                            0.12
-                    );
-
-
-                gradient.addColorStop(
-                    0,
-                    `rgba(
-                        255,
-                        255,
-                        255,
-                        ${star.alpha}
-                    )`
-                );
-
-
-                gradient.addColorStop(
-                    1,
-                    "rgba(255,255,255,0)"
-                );
-
-
-                ctx.strokeStyle =
-                    gradient;
-
-
-                ctx.lineWidth =
-                    star.width;
-
-
-                ctx.beginPath();
-
-
-                ctx.moveTo(
-                    star.x,
-                    star.y
-                );
-
-
-                ctx.lineTo(
-                    star.x -
-                        star.length,
-                    star.y -
-                        star.length *
-                        0.12
-                );
-
-
-                ctx.stroke();
-            }
-        }
-
-
-        /* =========================================================
-           DRAW PARTICLES
-           ========================================================= */
-
-        function drawParticles() {
-
-            for (
-                const particle of particles
-            ) {
-
-                let glow = 0;
-
-
-                if (
-                    mouse.active
-                ) {
-
-                    const dx =
-                        particle.x -
-                        mouse.x;
-
-
-                    const dy =
-                        particle.y -
-                        mouse.y;
-
-
-                    const distance =
-                        Math.sqrt(
-                            dx * dx +
-                            dy * dy
-                        );
-
-
-                    if (
-                        distance <
-                        MOUSE_RADIUS
-                    ) {
-
-                        glow =
-                            1 -
-                            distance /
-                            MOUSE_RADIUS;
-                    }
-                }
-
-
-                const brightness =
-                    0.75 +
-                    glow *
-                    0.25;
-
-
-                ctx.fillStyle =
-                    `rgba(
-                        255,
-                        255,
-                        255,
-                        ${
-                            particle.alpha *
-                            brightness
-                        }
-                    )`;
-
-
-                ctx.beginPath();
-
-
-                ctx.arc(
-                    particle.x,
-                    particle.y,
-                    particle.size,
-                    0,
-                    Math.PI * 2
-                );
-
-
-                ctx.fill();
-            }
-        }
-
-
-        /* =========================================================
-           BACKGROUND ANIMATION
-           ========================================================= */
-
-        function animate() {
-
-            ctx.fillStyle =
-                "#050608";
-
-
-            ctx.fillRect(
-                0,
-                0,
-                width,
-                height
-            );
-
-
-            const glow =
-                ctx.createRadialGradient(
-                    width / 2,
-                    height / 2,
-                    30,
-                    width / 2,
-                    height / 2,
-                    Math.min(
-                        width,
-                        height
-                    ) *
-                    0.55
-                );
-
-
-            glow.addColorStop(
-                0,
-                "rgba(255,255,255,0.025)"
-            );
-
-
-            glow.addColorStop(
-                1,
-                "rgba(0,0,0,0)"
-            );
-
-
-            ctx.fillStyle =
-                glow;
-
-
-            ctx.fillRect(
-                0,
-                0,
-                width,
-                height
-            );
-
-
-            drawStars();
-
-
-            for (
-                const particle of particles
-            ) {
-
-                updateParticle(
-                    particle
-                );
-            }
-
-
-            drawParticles();
-
-
-            requestAnimationFrame(
-                animate
-            );
-        }
-
-
-        /* =========================================================
-           NAV
-           ========================================================= */
-
-        const navItems =
-            document.querySelectorAll(
-                ".nav-item"
-            );
-
-
-        navItems.forEach(
-            (
-                item
-            ) => {
-
-                item.addEventListener(
-                    "click",
-                    () => {
-
-                        navItems.forEach(
-                            (
-                                nav
-                            ) => {
-
-                                nav.classList.remove(
-                                    "active"
-                                );
-                            }
-                        );
-
-
-                        item.classList.add(
-                            "active"
-                        );
-                    }
+                button.classList.add(
+                    "active"
                 );
             }
         );
+    });
 
+/* =========================
+   START
+========================= */
 
-        /* =========================================================
-           START
-           ========================================================= */
+resize();
+animate();
 
-        resize();
-
-        animate();
-
-    </script>
+</script>
 
 </body>
 </html>
-```
