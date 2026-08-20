@@ -257,6 +257,73 @@ canvas {
 }
 
 /* =========================================
+   STUDY GRID
+   Symmetrical grid of smaller cards, sits in
+   normal document flow (no inner scroll) so it
+   grows the page and scrolls with everything else.
+========================================= */
+
+.study-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+
+    width: min(1100px, 90vw);
+    margin: 55px auto 0;
+}
+
+.study-card {
+    position: relative;
+    height: 190px;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: #0b0e13;
+    box-shadow: 0 14px 40px rgba(0,0,0,.3);
+    transition: transform .25s ease, border-color .25s ease;
+}
+
+.study-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255,255,255,.18);
+}
+
+.study-image {
+    width: 100%;
+    height: 110px;
+    display: block;
+    object-fit: cover;
+    background: linear-gradient(135deg, #11151b, #07090d);
+}
+
+.study-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(4,6,9,.98));
+    pointer-events: none;
+}
+
+.study-content {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+}
+
+.study-name {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.study-description {
+    margin: 5px 0 0;
+    color: rgba(255,255,255,.45);
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+/* =========================================
    CAROUSEL FADE
 ========================================= */
 
@@ -338,6 +405,16 @@ canvas {
     .feature-image {
         height: 150px;
     }
+    .study-grid {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 12px;
+    }
+    .study-card {
+        height: 165px;
+    }
+    .study-image {
+        height: 90px;
+    }
 }
 </style>
 </head>
@@ -347,10 +424,10 @@ canvas {
 <canvas id="canvas"></canvas>
 
 <nav class="nav">
-    <button class="nav-item active">Home</button>
-    <button class="nav-item">Study</button>
-    <button class="nav-item">Media</button>
-    <button class="nav-item">More</button>
+    <button class="nav-item active" data-section="home">Home</button>
+    <button class="nav-item" data-section="study">Study</button>
+    <button class="nav-item" data-section="media">Media</button>
+    <button class="nav-item" data-section="more">More</button>
     <div class="version">V1</div>
 </nav>
 
@@ -359,7 +436,7 @@ canvas {
     <div class="scroll-cue">scroll to explore</div>
 </section>
 
-<section class="feature-section">
+<section class="feature-section" id="homeSection">
 
     <div class="feature-heading">
         <h2 class="feature-title">THINGS WE FEATURE</h2>
@@ -380,12 +457,26 @@ canvas {
 
 </section>
 
+<section class="feature-section" id="studySection">
+
+    <div class="feature-heading">
+        <h2 class="feature-title">STUDY</h2>
+        <div class="feature-coming">/ MATERIALS</div>
+        <p class="feature-description">
+            A growing set of notes, guides, and resources.
+        </p>
+    </div>
+
+    <div class="study-grid" id="studyGrid"></div>
+
+</section>
+
 <footer class="footer">MAJIN V1</footer>
 
 <script>
 
 /* =========================================
-   EXPLORE CARDSSSSSS
+   CHANGE YOUR CARDS HERE
 ========================================= */
 
 const features = [
@@ -395,6 +486,31 @@ const features = [
     { image: "PASTE_IMAGE_URL_HERE", title: "Feature Four",  description: "Change this text." },
     { image: "PASTE_IMAGE_URL_HERE", title: "Feature Five",  description: "Change this text." },
     { image: "PASTE_IMAGE_URL_HERE", title: "Feature Six",   description: "Change this text." }
+];
+
+/* =========================================
+   CHANGE YOUR STUDY CARDS HERE
+========================================= */
+
+const studyItems = [
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 1",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 2",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 3",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 4",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 5",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 6",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 7",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 8",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 9",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 10", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 11", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 12", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 13", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 14", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 15", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 16", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 17", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 18", description: "Change this text." }
 ];
 
 /* =========================================
@@ -446,6 +562,53 @@ function buildCarousel() {
 
 buildCarousel();
 
+/* =========================================
+   BUILD STUDY GRID
+========================================= */
+
+const studyGrid = document.getElementById("studyGrid");
+
+function makeStudyCard(item) {
+    const card = document.createElement("article");
+    card.className = "study-card";
+
+    const image = document.createElement("img");
+    image.className = "study-image";
+    image.src = item.image;
+    image.alt = item.title;
+    image.onerror = function () { this.style.opacity = "0"; };
+
+    const gradient = document.createElement("div");
+    gradient.className = "study-gradient";
+
+    const content = document.createElement("div");
+    content.className = "study-content";
+
+    const title = document.createElement("h3");
+    title.className = "study-name";
+    title.textContent = item.title;
+
+    const description = document.createElement("p");
+    description.className = "study-description";
+    description.textContent = item.description;
+
+    content.appendChild(title);
+    content.appendChild(description);
+
+    card.appendChild(image);
+    card.appendChild(gradient);
+    card.appendChild(content);
+
+    return card;
+}
+
+function buildStudyGrid() {
+    studyGrid.innerHTML = "";
+    studyItems.forEach(item => studyGrid.appendChild(makeStudyCard(item)));
+}
+
+buildStudyGrid();
+
 let carouselX = 0;
 const CARD_WIDTH = 253;
 const CAROUSEL_SPEED = 0.55;
@@ -472,7 +635,9 @@ moveCards();
    The canvas is absolutely positioned and sized
    to the FULL document height (not just the
    viewport), so it scrolls together with the
-   rest of the page as one unit. The "MAJIN V1 and the
+   rest of the page as one unit. The "MAJIN V1"
+   particle title lives near the top (inside the
+   hero area) and scrolls away normally, and the
    stars are spread across the whole page height
    instead of being pinned to the screen.
 ========================================= */
@@ -480,9 +645,9 @@ moveCards();
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-let viewWidth = 0;   
-let viewHeight = 0;   
-let canvasHeight = 0; 
+let viewWidth = 0;    // window width
+let viewHeight = 0;   // window height (used to size/place the hero text)
+let canvasHeight = 0; // full scrollable document height (used to size the canvas)
 
 const mouse = { x: -1000, y: -1000, active: false };
 
@@ -697,13 +862,38 @@ function animate() {
 }
 
 /* =========================================
-   NAV
+   NAV / PAGE SWITCHING
+
+   Only one section is shown at a time. Switching
+   sections changes the document's height, so the
+   background canvas is re-measured and rebuilt
+   (resize()) right after the swap — that keeps the
+   stars/particles covering the whole new page
+   instead of leaving stale empty/short space.
 ========================================= */
+
+const pageSections = {
+    home: document.getElementById("homeSection"),
+    study: document.getElementById("studySection")
+};
+
+function showSection(key) {
+    Object.values(pageSections).forEach(section => {
+        if (section) section.style.display = "none";
+    });
+
+    const target = pageSections[key];
+    if (target) target.style.display = "";
+
+    resize();
+}
 
 document.querySelectorAll(".nav-item").forEach(button => {
     button.addEventListener("click", () => {
         document.querySelectorAll(".nav-item").forEach(b => b.classList.remove("active"));
         button.classList.add("active");
+
+        showSection(button.dataset.section);
     });
 });
 
@@ -711,10 +901,10 @@ document.querySelectorAll(".nav-item").forEach(button => {
    START
 ========================================= */
 
-resize();
+showSection("home");
 animate();
 
-
+// Safety re-measure in case fonts/images shift layout right after load.
 window.addEventListener("load", resize);
 setTimeout(resize, 300);
 
