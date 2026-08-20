@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAJIN V1 — Study</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<nav class="nav">
+    <a class="nav-item" href="/">Home</a>
+    <a class="nav-item active" href="/study/">Study</a>
+    <button class="nav-item">Media</button>
+    <button class="nav-item">More</button>
+    <div class="version">V1</div>
+</nav>
+
+<section class="hero">
+    <div class="hero-subtitle">have fun ;)</div>
+    <div class="scroll-cue">scroll to explore</div>
+</section>
+
+<section class="feature-section">
+
+    <div class="feature-heading">
+        <h2 class="feature-title">STUDY</h2>
+        <div class="feature-coming">/ MATERIALS</div>
+        <p class="feature-description">
+            A growing set of notes, guides, and resources.
+        </p>
+    </div>
+
+    <div class="study-grid" id="studyGrid"></div>
+
+</section>
+
+<footer class="footer">MAJIN V1</footer>
+
+<script>
+
+/* =========================================
+   CHANGE YOUR STUDY CARDS HERE
+========================================= */
+
+const studyItems = [
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 1",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 2",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 3",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 4",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 5",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 6",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 7",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 8",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 9",  description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 10", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 11", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 12", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 13", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 14", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 15", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 16", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 17", description: "Change this text." },
+    { image: "PASTE_IMAGE_URL_HERE", title: "Topic 18", description: "Change this text." }
+];
+
+const studyGrid = document.getElementById("studyGrid");
+
+function makeStudyCard(item) {
+    const card = document.createElement("article");
+    card.className = "study-card";
+
+    const image = document.createElement("img");
+    image.className = "study-image";
+    image.src = item.image;
+    image.alt = item.title;
+    image.onerror = function () { this.style.opacity = "0"; };
+
+    const gradient = document.createElement("div");
+    gradient.className = "study-gradient";
+
+    const content = document.createElement("div");
+    content.className = "study-content";
+
+    const title = document.createElement("h3");
+    title.className = "study-name";
+    title.textContent = item.title;
+
+    const description = document.createElement("p");
+    description.className = "study-description";
+    description.textContent = item.description;
+
+    content.appendChild(title);
+    content.appendChild(description);
+
+    card.appendChild(image);
+    card.appendChild(gradient);
+    card.appendChild(content);
+
+    return card;
+}
+
+function buildStudyGrid() {
+    studyGrid.innerHTML = "";
+    studyItems.forEach(item => studyGrid.appendChild(makeStudyCard(item)));
+}
+
+buildStudyGrid();
+
+</script>
+<script src="/background.js"></script>
+
+</body>
+</html>
