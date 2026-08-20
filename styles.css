@@ -1,0 +1,412 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    background: #050608;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: #050608;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
+
+/* =========================================
+   BACKGROUND CANVAS
+   Absolute (not fixed) and sized to the full
+   document height in JS, so it scrolls together
+   with the rest of the page instead of staying
+   pinned in place while content moves past it.
+========================================= */
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* =========================================
+   NAV
+========================================= */
+
+.nav {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+    background: rgba(15,17,21,.72);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    box-shadow:
+        0 10px 40px rgba(0,0,0,.4),
+        inset 0 1px rgba(255,255,255,.04);
+}
+
+.nav-item {
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: rgba(255,255,255,.6);
+    padding: 10px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-block;
+    transition: .2s ease;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: white;
+    background: rgba(255,255,255,.08);
+}
+
+.version {
+    color: rgba(255,255,255,.35);
+    font-size: 11px;
+    margin: 0 5px;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.hero {
+    position: relative;
+    z-index: 5;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 110px 20px 100px;
+    text-align: center;
+}
+
+.hero-subtitle {
+    margin-top: 210px;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,.35);
+}
+
+.scroll-cue {
+    position: absolute;
+    bottom: 28px;
+    color: rgba(255,255,255,.2);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+}
+
+/* =========================================
+   FEATURE SECTION
+========================================= */
+
+.feature-section {
+    position: relative;
+    z-index: 6;
+    width: 100%;
+    min-height: 100vh;
+    padding: 130px 0 220px;
+    overflow: visible;
+}
+
+.feature-heading {
+    width: min(1100px, 90vw);
+    margin: 0 auto;
+}
+
+.feature-title {
+    margin: 0;
+    font-size: clamp(38px, 5vw, 68px);
+    font-weight: 850;
+    letter-spacing: -3px;
+    line-height: .95;
+}
+
+.feature-coming {
+    margin-top: 8px;
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    color: rgba(255,255,255,.30);
+}
+
+.feature-description {
+    max-width: 500px;
+    margin-top: 18px;
+    color: rgba(255,255,255,.35);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* =========================================
+   CAROUSEL
+========================================= */
+
+.carousel-window {
+    position: relative;
+    width: 100%;
+    margin-top: 55px;
+    overflow: hidden;
+}
+
+.carousel-viewport {
+    width: 50%;
+    margin-left: 25%;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 18px;
+    width: max-content;
+    will-change: transform;
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.feature-card {
+    position: relative;
+    flex: 0 0 235px;
+    height: 285px;
+    overflow: hidden;
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: #0b0e13;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    transition: transform .25s ease, border-color .25s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-7px);
+    border-color: rgba(255,255,255,.18);
+}
+
+.feature-image {
+    width: 100%;
+    height: 175px;
+    display: block;
+    object-fit: cover;
+    background: linear-gradient(135deg, #11151b, #07090d);
+}
+
+.feature-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(4,6,9,.98));
+    pointer-events: none;
+}
+
+.feature-content {
+    position: absolute;
+    left: 17px;
+    right: 17px;
+    bottom: 17px;
+}
+
+.feature-name {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 750;
+}
+
+.feature-description-card {
+    margin: 7px 0 0;
+    color: rgba(255,255,255,.45);
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+/* =========================================
+   STUDY GRID
+   Symmetrical grid of smaller cards, sits in
+   normal document flow (no inner scroll) so it
+   grows the page and scrolls with everything else.
+========================================= */
+
+.study-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+
+    width: min(1100px, 90vw);
+    margin: 55px auto 0;
+}
+
+.study-card {
+    position: relative;
+    height: 190px;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: #0b0e13;
+    box-shadow: 0 14px 40px rgba(0,0,0,.3);
+    transition: transform .25s ease, border-color .25s ease;
+}
+
+.study-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255,255,255,.18);
+}
+
+.study-image {
+    width: 100%;
+    height: 110px;
+    display: block;
+    object-fit: cover;
+    background: linear-gradient(135deg, #11151b, #07090d);
+}
+
+.study-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(4,6,9,.98));
+    pointer-events: none;
+}
+
+.study-content {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
+}
+
+.study-name {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.study-description {
+    margin: 5px 0 0;
+    color: rgba(255,255,255,.45);
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+/* =========================================
+   CAROUSEL FADE
+========================================= */
+
+.carousel-fade-left,
+.carousel-fade-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 16%;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.carousel-fade-left {
+    left: 0;
+    background: linear-gradient(to right, #050608 5%, transparent);
+}
+
+.carousel-fade-right {
+    right: 0;
+    background: linear-gradient(to left, #050608 5%, transparent);
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.footer {
+    position: relative;
+    z-index: 5;
+    padding: 80px 20px 120px;
+    border-top: 1px solid rgba(255,255,255,.05);
+    text-align: center;
+    color: rgba(255,255,255,.2);
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 850px) {
+    .carousel-viewport {
+        width: 70%;
+        margin-left: 15%;
+    }
+    .feature-card {
+        flex-basis: 220px;
+    }
+}
+
+@media (max-width: 600px) {
+    .nav {
+        width: calc(100% - 20px);
+        justify-content: center;
+    }
+    .nav-item {
+        padding: 9px 10px;
+        font-size: 11px;
+    }
+    .version {
+        display: none;
+    }
+    .hero-subtitle {
+        margin-top: 150px;
+    }
+    .feature-section {
+        padding-top: 90px;
+    }
+    .carousel-viewport {
+        width: 90%;
+        margin-left: 5%;
+    }
+    .feature-card {
+        flex-basis: 205px;
+        height: 255px;
+    }
+    .feature-image {
+        height: 150px;
+    }
+    .study-grid {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 12px;
+    }
+    .study-card {
+        height: 165px;
+    }
+    .study-image {
+        height: 90px;
+    }
+}
