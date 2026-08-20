@@ -385,7 +385,7 @@ canvas {
 <script>
 
 /* =========================================
-   CHANGE YOUR CARDS HERE
+   EXPLORE CARDSSSSSS
 ========================================= */
 
 const features = [
@@ -472,9 +472,7 @@ moveCards();
    The canvas is absolutely positioned and sized
    to the FULL document height (not just the
    viewport), so it scrolls together with the
-   rest of the page as one unit. The "MAJIN V1"
-   particle title lives near the top (inside the
-   hero area) and scrolls away normally, and the
+   rest of the page as one unit. The "MAJIN V1 and the
    stars are spread across the whole page height
    instead of being pinned to the screen.
 ========================================= */
@@ -482,9 +480,9 @@ moveCards();
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-let viewWidth = 0;    // window width
-let viewHeight = 0;   // window height (used to size/place the hero text)
-let canvasHeight = 0; // full scrollable document height (used to size the canvas)
+let viewWidth = 0;   
+let viewHeight = 0;   
+let canvasHeight = 0; 
 
 const mouse = { x: -1000, y: -1000, active: false };
 
@@ -716,7 +714,7 @@ document.querySelectorAll(".nav-item").forEach(button => {
 resize();
 animate();
 
-// Safety re-measure in case fonts/images shift layout right after load.
+
 window.addEventListener("load", resize);
 setTimeout(resize, 300);
 
